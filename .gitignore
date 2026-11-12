@@ -9,4 +9,5 @@ __pycache__/
 .DS_Store
 fnirsi_copia.py
 misure/
+measurements/
 *.csv

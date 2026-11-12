@@ -1,10 +1,10 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Visore FNIRSI DPOX180H</title>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>FNIRSI DPOX180H Viewer</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: banco di misura — barra file in alto, schermo dello strumento al centro, pannello canali a fianco (sotto su telefono). */
+/* Layout: test bench — file bar on top, scope screen in the middle, channel panel beside it (below on phones). */
 :root{
   --bg:#eef1f0; --panel:#ffffff; --fg:#17201e; --muted:#5d6b67; --line:#d3dbd8;
   --screen:#0f1714; --grid:#24342f; --grid-major:#36504a; --screen-fg:#b9c9c3;
@@ -96,70 +96,70 @@ details{font-size:.88rem;color:var(--muted)} details summary{cursor:pointer;colo
 <div class="wrap">
   <header>
     <div>
-      <h1>Visore FNIRSI DPOX180H</h1>
-      <p class="sub">Apre i file di forma d'onda salvati dall'oscilloscopio (cartella <code>Waveform</code>, estensione <code>.wav</code>), li converte in volt e secondi e li esporta in CSV. Tutto resta nel browser.</p>
+      <h1>FNIRSI DPOX180H Viewer</h1>
+      <p class="sub">Opens the waveform files saved by the scope (<code>Waveform</code> folder, <code>.wav</code> extension), converts them to volts and seconds and exports them to CSV. Everything stays in the browser.</p>
     </div>
     <div class="files">
       <label class="drop" id="drop" for="file">
         <input type="file" id="file" accept=".wav" multiple>
-        <span><b>Apri file .wav</b> o trascinali qui</span>
+        <span><b>Open .wav files</b> or drop them here</span>
       </label>
-      <label class="btn" for="dir">Apri cartella<input type="file" id="dir" webkitdirectory multiple hidden></label>
+      <label class="btn" for="dir">Open folder<input type="file" id="dir" webkitdirectory multiple hidden></label>
     </div>
   </header>
 
-  <div class="files" id="list" aria-label="File caricati"></div>
+  <div class="files" id="list" aria-label="Loaded files"></div>
 
   <div class="main">
-    <section class="scope" aria-label="Schermo">
+    <section class="scope" aria-label="Screen">
       <div class="scopebar"><span id="fname"></span><span id="tb"></span></div>
-      <canvas id="cv" width="1200" height="640" role="img" aria-label="Tracce dei due canali"></canvas>
+      <canvas id="cv" width="1200" height="640" role="img" aria-label="Traces of both channels"></canvas>
       <div class="panbar" id="panbar" hidden>
-        <button class="btn" type="button" id="panl" aria-label="Indietro di una divisione">◀</button>
-        <input type="range" id="pan" min="0" max="0" step="1" value="0" aria-label="Posizione della vista nell'acquisizione">
-        <button class="btn" type="button" id="panr" aria-label="Avanti di una divisione">▶</button>
+        <button class="btn" type="button" id="panl" aria-label="Back one division">◀</button>
+        <input type="range" id="pan" min="0" max="0" step="1" value="0" aria-label="View position in the acquisition">
+        <button class="btn" type="button" id="panr" aria-label="Forward one division">▶</button>
       </div>
-      <div class="readout" id="readout">Passa sopra le tracce per leggere i valori · trascina per ingrandire un tratto · doppio clic per tornare a tutto</div>
+      <div class="readout" id="readout">Hover over the traces to read values · drag to zoom into a section · double-click to show everything</div>
     </section>
 
     <aside class="side">
       <div class="card" id="card1" hidden></div>
       <div class="card" id="card2" hidden></div>
       <div class="card">
-        <h2>Tempo e vista</h2>
+        <h2>Time and view</h2>
         <div class="row">
-          <div class="field"><span id="tdivu" class="unit">s/div</span><span class="knob"><button class="btn" type="button" id="tdn" aria-label="Meno s/div">−</button><input id="tdiv" type="number" step="any" min="0" aria-label="Secondi per divisione"><button class="btn" type="button" id="tup" aria-label="Più s/div">+</button></span></div>
-          <label class="field">Campionamento<input id="npts" type="text" readonly></label>
+          <div class="field"><span id="tdivu" class="unit">s/div</span><span class="knob"><button class="btn" type="button" id="tdn" aria-label="Less s/div">−</button><input id="tdiv" type="number" step="any" min="0" aria-label="Seconds per division"><button class="btn" type="button" id="tup" aria-label="More s/div">+</button></span></div>
+          <label class="field">Sample rate<input id="npts" type="text" readonly></label>
         </div>
         <div class="row">
-          <label class="field"><span>Da (<span class="unit" id="t0u">s</span>)</span><input id="t0" type="number" step="any" min="0"></label>
-          <label class="field"><span>A (<span class="unit" id="t1u">s</span>)</span><input id="t1" type="number" step="any" min="0"></label>
+          <label class="field"><span>From (<span class="unit" id="t0u">s</span>)</span><input id="t0" type="number" step="any" min="0"></label>
+          <label class="field"><span>To (<span class="unit" id="t1u">s</span>)</span><input id="t1" type="number" step="any" min="0"></label>
         </div>
         <div class="row" id="acqrow" hidden>
-          <label class="field">Acquisizione<select id="acq"></select></label>
+          <label class="field">Acquisition<select id="acq"></select></label>
           <div class="src" id="acqnote"></div>
         </div>
         <div class="src" id="tsrc"></div>
         <div class="tools">
-          <button class="btn" id="reset" type="button">Tutto</button>
-          <button class="btn" id="mode" type="button" aria-pressed="false">Sovrapponi le tracce</button>
+          <button class="btn" id="reset" type="button">Show all</button>
+          <button class="btn" id="mode" type="button" aria-pressed="false">Overlay traces</button>
         </div>
       </div>
       <div class="card">
-        <h2>Cursori</h2>
+        <h2>Cursors</h2>
         <div class="tools">
-          <button class="btn" id="curt" type="button" aria-pressed="false">Tempo (Δt)</button>
-          <button class="btn" id="curv" type="button" aria-pressed="false">Tensione (ΔV)</button>
-          <button class="btn" id="curhere" type="button" hidden>Riporta nella vista</button>
+          <button class="btn" id="curt" type="button" aria-pressed="false">Time (Δt)</button>
+          <button class="btn" id="curv" type="button" aria-pressed="false">Voltage (ΔV)</button>
+          <button class="btn" id="curhere" type="button" hidden>Bring into view</button>
         </div>
-        <label class="field" id="curvchw" hidden>Canale dei cursori di tensione<select id="curvch"></select></label>
+        <label class="field" id="curvchw" hidden>Voltage cursor channel<select id="curvch"></select></label>
         <dl class="stats" id="curstats"></dl>
-        <div class="src" id="curhelp">Attiva i cursori e trascina le linee sul grafico per spostarli.</div>
+        <div class="src" id="curhelp">Turn the cursors on and drag the lines on the plot to move them.</div>
       </div>
       <div class="card">
-        <h2>Decodifica bus</h2>
-        <label class="field">Protocollo<select id="proto">
-          <option value="">Nessuna</option><option value="i2c">I²C (SCL e SDA)</option><option value="uart">UART (seriale)</option><option value="ow">1-Wire</option>
+        <h2>Bus decoding</h2>
+        <label class="field">Protocol<select id="proto">
+          <option value="">None</option><option value="i2c">I²C (SCL and SDA)</option><option value="uart">UART (serial)</option><option value="ow">1-Wire</option>
         </select></label>
         <div id="decopts" hidden>
           <div class="row" id="o-i2c">
@@ -168,73 +168,73 @@ details{font-size:.88rem;color:var(--muted)} details summary{cursor:pointer;colo
           </div>
           <div id="o-uart">
             <div class="row">
-              <label class="field">Canali<select id="uch"></select></label>
-              <label class="field">Velocità (baud)<select id="ubaud"><option value="auto">Automatica</option><option value="300">300</option><option value="600">600</option><option value="1200">1200</option><option value="2400">2400</option><option value="4800">4800</option><option value="9600">9600</option><option value="14400">14400</option><option value="19200">19200</option><option value="28800">28800</option><option value="31250">31250</option><option value="38400">38400</option><option value="57600">57600</option><option value="76800">76800</option><option value="115200">115200</option><option value="230400">230400</option><option value="250000">250000</option><option value="460800">460800</option><option value="500000">500000</option><option value="921600">921600</option><option value="1000000">1000000</option><option value="2000000">2000000</option></select></label>
+              <label class="field">Channels<select id="uch"></select></label>
+              <label class="field">Baud rate<select id="ubaud"><option value="auto">Automatic</option><option value="300">300</option><option value="600">600</option><option value="1200">1200</option><option value="2400">2400</option><option value="4800">4800</option><option value="9600">9600</option><option value="14400">14400</option><option value="19200">19200</option><option value="28800">28800</option><option value="31250">31250</option><option value="38400">38400</option><option value="57600">57600</option><option value="76800">76800</option><option value="115200">115200</option><option value="230400">230400</option><option value="250000">250000</option><option value="460800">460800</option><option value="500000">500000</option><option value="921600">921600</option><option value="1000000">1000000</option><option value="2000000">2000000</option></select></label>
             </div>
             <div class="row">
-              <label class="field">Bit di dati<select id="ubits"><option>5</option><option>6</option><option>7</option><option selected>8</option><option>9</option></select></label>
-              <label class="field">Parità<select id="upar"><option value="none">Nessuna</option><option value="even">Pari</option><option value="odd">Dispari</option></select></label>
+              <label class="field">Data bits<select id="ubits"><option>5</option><option>6</option><option>7</option><option selected>8</option><option>9</option></select></label>
+              <label class="field">Parity<select id="upar"><option value="none">None</option><option value="even">Even</option><option value="odd">Odd</option></select></label>
             </div>
             <div class="row">
-              <label class="field">Bit di stop<select id="ustop"><option value="1">1</option><option value="1.5">1,5</option><option value="2">2</option></select></label>
-              <label class="field">Livelli<select id="uinv"><option value="0">Normali (TTL)</option><option value="1">Invertiti (RS-232)</option></select></label>
+              <label class="field">Stop bits<select id="ustop"><option value="1">1</option><option value="1.5">1.5</option><option value="2">2</option></select></label>
+              <label class="field">Levels<select id="uinv"><option value="0">Normal (TTL)</option><option value="1">Inverted (RS-232)</option></select></label>
             </div>
           </div>
           <div class="row" id="o-ow">
-            <label class="field">Canale<select id="owch"></select></label><div></div>
+            <label class="field">Channel<select id="owch"></select></label><div></div>
           </div>
           <div class="row">
-            <label class="field" id="thrw0"><span><span id="thrl0">Soglia CH1</span> (<span class="unit">V</span>)</span><input id="thr0" type="number" step="0.05"></label>
-            <label class="field" id="thrw1"><span><span id="thrl1">Soglia CH2</span> (<span class="unit">V</span>)</span><input id="thr1" type="number" step="0.05"></label>
+            <label class="field" id="thrw0"><span><span id="thrl0">CH1 threshold</span> (<span class="unit">V</span>)</span><input id="thr0" type="number" step="0.05"></label>
+            <label class="field" id="thrw1"><span><span id="thrl1">CH2 threshold</span> (<span class="unit">V</span>)</span><input id="thr1" type="number" step="0.05"></label>
           </div>
-          <div class="tools"><button class="btn" id="thrauto" type="button">Soglie automatiche</button><button class="btn" id="deccopy" type="button">Copia decodifica</button></div>
+          <div class="tools"><button class="btn" id="thrauto" type="button">Auto thresholds</button><button class="btn" id="deccopy" type="button">Copy decoding</button></div>
           <div class="src" id="decinfo"></div>
-          <ol class="declist" id="declist" aria-label="Messaggi decodificati"></ol>
+          <ol class="declist" id="declist" aria-label="Decoded messages"></ol>
         </div>
         <div class="src warn" id="decnone" hidden></div>
       </div>
       <div class="card">
-        <h2>Esporta</h2>
+        <h2>Export</h2>
         <div class="tools">
-          <button class="btn primary" id="csv" type="button">Salva CSV</button>
-          <button class="btn" id="png" type="button">Salva immagine</button>
-          <button class="btn" id="copy" type="button">Copia CSV</button>
+          <button class="btn primary" id="csv" type="button">Save CSV</button>
+          <button class="btn" id="png" type="button">Save image</button>
+          <button class="btn" id="copy" type="button">Copy CSV</button>
         </div>
         <div class="msg" id="msg" role="status"></div>
-        <div class="src">Il CSV contiene il tratto visibile: tempo in secondi e tensione in volt dei canali attivi, separati da punto e virgola.</div>
+        <div class="src">The CSV holds the visible section: time in seconds and the voltage in volts of the active channels, separated by semicolons.</div>
       </div>
     </aside>
   </div>
 
   <div class="card" id="scopecard">
-    <h2>Oscilloscopio</h2>
-    <p class="note" id="offhelp">Su macOS l'oscilloscopio si blocca con le letture grandi che il sistema fa normalmente: l'elenco dei file si vede, ma la copia dal Finder resta a 0 byte. Lo script <code>fnirsi.py</code>, nella cartella di questo visore, legge 4 kB alla volta senza cache e funziona sempre. Copia i file nuovi delle cartelle <code>Waveform</code> e <code>Screenshots</code> in <code>misure/oscilloscopio_AAAAMMGG</code>, senza mai sovrascrivere un file diverso con lo stesso nome (l'oscilloscopio riparte da 1 dopo una cancellazione). Poi apri qui la cartella con <b>Apri cartella</b>.</p>
+    <h2>Scope</h2>
+    <p class="note" id="offhelp">On macOS the scope hangs on the large reads the system normally issues: the file list shows up, but a copy from the Finder stays at 0 bytes. The <code>fnirsi.py</code> script, in this viewer's folder, reads 4 kB at a time without cache and always works. It copies the new files from the <code>Waveform</code> and <code>Screenshots</code> folders to <code>measurements/fnirsi_YYYYMMDD</code>, and never overwrites a different file with the same name (the scope restarts its numbering at 1 after a deletion). Then open that folder here with <b>Open folder</b>.</p>
     <div id="live" hidden>
       <div class="tools">
-        <span class="src" id="scopestate" role="status">Controllo il collegamento…</span>
-        <button class="btn" id="reload" type="button" disabled>Aggiorna elenco</button>
-        <button class="btn" id="eject" type="button" disabled>Espelli</button>
+        <span class="src" id="scopestate" role="status">Checking the connection…</span>
+        <button class="btn" id="reload" type="button" disabled>Refresh list</button>
+        <button class="btn" id="eject" type="button" disabled>Eject</button>
       </div>
-      <div class="gallery" id="gallery" aria-label="File sull'oscilloscopio"></div>
+      <div class="gallery" id="gallery" aria-label="Files on the scope"></div>
       <div class="tools" id="galtools" hidden>
-        <button class="btn" id="selnew" type="button">Seleziona i nuovi</button>
-        <button class="btn" id="selall" type="button">Tutti</button>
-        <button class="btn" id="selnone" type="button">Nessuno</button>
-        <button class="btn primary" id="dlscope" type="button" disabled>Scarica selezionati</button>
-        <button class="btn danger" id="delscope" type="button" disabled>Cancella dallo strumento</button>
+        <button class="btn" id="selnew" type="button">Select new</button>
+        <button class="btn" id="selall" type="button">All</button>
+        <button class="btn" id="selnone" type="button">None</button>
+        <button class="btn primary" id="dlscope" type="button" disabled>Download selected</button>
+        <button class="btn danger" id="delscope" type="button" disabled>Delete from scope</button>
       </div>
       <div class="msg" id="livemsg" role="status"></div>
-      <div class="files" id="shots" aria-label="Screenshot scaricati"></div>
+      <div class="files" id="shots" aria-label="Downloaded screenshots"></div>
     </div>
-    <p class="note" id="livehint">Per scegliere i file dalle miniature, scaricarli e cancellarli dallo strumento apri il visore con <code>python3 fnirsi.py visore</code>. Senza il visore, il comando seguente copia i file da terminale.</p>
-    <div class="tools" id="cmdrow"><code id="cmd">python3 fnirsi.py scarica --csv --espelli</code><button class="btn" id="copycmd" type="button">Copia comando</button></div>
-    <p class="note">Prima di collegare l'USB metti l'acquisizione in STOP e salva tutto quello che serve. Se una lettura si blocca, lo script si ferma dopo 30 s: stacca e riattacca il cavo e rilancialo. Per le misure stacca l'USB dal Mac: il ritorno di massa attraverso il Mac aggiunge un'onda quadra di circa 1 kHz sulla massa.</p>
+    <p class="note" id="livehint">To pick files by thumbnail, download them and delete them from the scope, start the viewer with <code>python3 fnirsi.py viewer</code>. Without it, the command below copies the files from the terminal.</p>
+    <div class="tools" id="cmdrow"><code id="cmd">python3 fnirsi.py download --csv --eject</code><button class="btn" id="copycmd" type="button">Copy command</button></div>
+    <p class="note">Before plugging in the USB cable, put the acquisition in STOP and save everything you need. If a read hangs, the script gives up after 30 s: unplug and replug the cable and run it again. Unplug the USB cable from the Mac while measuring: the ground return through the Mac adds a square wave of about 1 kHz on the ground.</p>
   </div>
 
   <details>
-    <summary>Come viene letto il file</summary>
-    <p class="note">Il file non è un WAV audio: è il formato interno dell'oscilloscopio. Una tabella all'inizio indica tre sezioni (impostazioni, miniatura dello schermo, dati). I campioni sono a 16 bit; lo schermo alto 8 divisioni vale 12800 conteggi, cioè 1600 conteggi per divisione.</p>
-    <p class="note">Dalle impostazioni vengono letti: canali accesi, V/div di ciascun canale (in microvolt), posizione dello zero (in pixel, 25 per divisione), tempo per divisione (in picosecondi), frequenza di campionamento e numero di campioni per canale. Tutti i valori sono big-endian, campioni compresi: prima tutti quelli di CH1, poi tutti quelli di CH2. Ogni canale contiene più acquisizioni della stessa finestra di 12 divisioni, salvate una dopo l'altra (2 a 1 ms/div, fino a 10 a 50 ns/div): la prima è quella che si vedeva sullo schermo, le altre si scelgono in <b>Acquisizione</b>. I primi campioni di ogni acquisizione sono vuoti e non vengono mostrati. Se un valore letto non è plausibile il campo è segnato da verificare e lo puoi correggere a mano. Le parti fuori dallo schermo sono tagliate dall'oscilloscopio e compaiono come tratti piatti al bordo.</p>
+    <summary>How the file is read</summary>
+    <p class="note">The file is not an audio WAV: it is the scope's own format. A table at the start points to three sections (settings, screen thumbnail, data). Samples are 16-bit; the 8-division screen height is 12800 counts, that is 1600 counts per division.</p>
+    <p class="note">From the settings the viewer reads: which channels are on, each channel's V/div (in microvolts), the zero position (in pixels, 25 per division), the time per division (in picoseconds), the sample rate and the number of samples per channel. Every value is big-endian, samples included: first all of CH1, then all of CH2. Each channel holds several acquisitions of the same 12-division window, saved one after the other (2 at 1 ms/div, up to 10 at 50 ns/div): the first is the one the screen showed, the others can be picked under <b>Acquisition</b>. The first samples of each acquisition are empty and are not shown. If a value read from the file is not plausible, the field is marked for checking and you can correct it by hand. Parts outside the screen are clipped by the scope and show up as flat sections at the edge.</p>
   </details>
 </div>
 
@@ -252,19 +252,19 @@ function is125(x){if(!(x>0))return false;const e=Math.pow(10,Math.floor(Math.log
 
 function parse(name,buf){
   const b=new Uint8Array(buf);
-  if(b.length<0x3000)throw new Error(name+": file troppo corto per essere una forma d'onda FNIRSI.");
+  if(b.length<0x3000)throw new Error(name+": file too short to be an FNIRSI waveform.");
   const tab=[];for(let i=0;i<7;i++)tab.push(u32be(b,i*4));
   const tableOk=tab[0]===0x32&&tab[0]+tab[1]===tab[2]&&tab[2]+tab[3]===tab[4]&&tab[4]+tab[5]===tab[6]&&tab[6]===b.length;
-  // Firmware V40: tutti i campi sono big-endian. I campioni sono u16 a partire
-  // esattamente da tab[4]: prima tutto CH1, poi tutto CH2 (se acceso).
+  // Firmware V40: every field is big-endian. Samples are u16 starting exactly
+  // at tab[4]: all of CH1 first, then all of CH2 (if on).
   const start=tableOk?tab[4]:0x2ED2;
   const n=tableOk?Math.floor(tab[5]/2):Math.floor((b.length-start)/2);
-  if(n<200)throw new Error(name+": nessun dato di forma d'onda trovato.");
+  if(n<200)throw new Error(name+": no waveform data found.");
   const dv=new DataView(buf,start,n*2);
-  // Canali accesi (byte 0x66 e 0xA6), campioni per canale (u32 a 0x12D), campioni di
-  // un'acquisizione (u32 a 0x11D), frequenza di campionamento (Hz, 0x13D) e tempo/div.
-  // Ogni canale contiene più acquisizioni della stessa finestra di 12 divisioni, una
-  // dopo l'altra: la prima è quella che si vedeva sullo schermo.
+  // Channels on (bytes 0x66 and 0xA6), samples per channel (u32 at 0x12D), samples of
+  // one acquisition (u32 at 0x11D), sample rate (Hz, 0x13D) and time/div.
+  // Each channel holds several acquisitions of the same 12-division window, one after
+  // the other: the first is the one the screen showed.
   const tps=u40be(b,0x1D8), tdivF=tps/1e12, tOk=is125(tdivF)&&tdivF>=1e-9&&tdivF<=100;
   const rate=u32be(b,0x13D), rateOk=rate>0;
   let on=[b[0x66]===1,b[0xA6]===1];if(!on[0]&&!on[1])on=[true,false];
@@ -272,7 +272,7 @@ function parse(name,buf){
   let total=u32be(b,0x12D);if(!(total>0&&total*nch<=n))total=Math.floor(n/nch);
   let per=u32be(b,0x11D);if(!(per>0&&per<=total&&total%per===0))per=total;
   const nacq=total/per;
-  const all=[new Float64Array(total),new Float64Array(total)];   // NaN = nessun dato
+  const all=[new Float64Array(total),new Float64Array(total)];   // NaN = no data
   let o=0;
   for(let k=0;k<2;k++){
     for(let a=0;a<nacq;a++){
@@ -289,7 +289,7 @@ function parse(name,buf){
     const zOk=zeroCounts>=-COUNTS_PER_DIV&&zeroCounts<=COUNTS_PER_DIV*(VDIV+1);
     return {name:k?"CH2":"CH1",on:on[k],show:on[k],vdiv:vOk?vd:1,zeroDiv:zOk?zeroCounts/COUNTS_PER_DIV:(k?3:5),vOk,zOk};
   });
-  ch.forEach(c=>{c.dispV=c.vdiv;c.dispPos=c.zeroDiv});   // scala e posizione di visualizzazione
+  ch.forEach(c=>{c.dispV=c.vdiv;c.dispPos=c.zeroDiv});   // display scale and position
   const tdiv=tOk?tdivF:1;
   return {name,raw,all,per,nacq,acq:0,ch,tdiv,tOk,tableOk,rateOk,dtS:rateOk?1/rate:tdiv/PTS_PER_DIV};
 }
@@ -323,23 +323,23 @@ function renderCards(){
     const c=f.ch[k], el=$("card"+(k+1)), col=k?"--ch2":"--ch1";
     el.innerHTML="";el.hidden=false;
     const h=document.createElement("h2");h.innerHTML='<span class="swatch" style="background:var('+col+')"></span>';
-    const nm=document.createElement("span");nm.textContent="Canale "+(k+1);h.appendChild(nm);el.appendChild(h);
+    const nm=document.createElement("span");nm.textContent="Channel "+(k+1);h.appendChild(nm);el.appendChild(h);
     const r1=document.createElement("div");r1.className="row";
-    r1.appendChild(field("Nome","text",c.name,v=>{c.name=v||("CH"+(k+1));draw()},"name"+k));
+    r1.appendChild(field("Name","text",c.name,v=>{c.name=v||("CH"+(k+1));draw()},"name"+k));
     r1.appendChild(knobField("V/div","vd"+k,c.dispV,x=>{if(x>0){c.dispV=x;draw()}}));
     el.appendChild(r1);
     const r2=document.createElement("div");r2.className="row";
-    r2.appendChild(field("Zero (div dal basso)","number",+c.dispPos.toFixed(2),v=>{const x=parseFloat(v);if(isFinite(x)){c.dispPos=x;draw()}},"zd"+k));
-    const chk=document.createElement("label");chk.className="check";chk.innerHTML='<input type="checkbox" id="sh'+k+'"'+(c.show?" checked":"")+'> Mostra';
+    r2.appendChild(field("Zero (div from bottom)","number",+c.dispPos.toFixed(2),v=>{const x=parseFloat(v);if(isFinite(x)){c.dispPos=x;draw()}},"zd"+k));
+    const chk=document.createElement("label");chk.className="check";chk.innerHTML='<input type="checkbox" id="sh'+k+'"'+(c.show?" checked":"")+'> Show';
     chk.querySelector("input").onchange=e=>{c.show=e.target.checked;draw()};r2.appendChild(chk);el.appendChild(r2);
     const src=document.createElement("div");src.className="src"+((c.on&&!(c.vOk&&c.zOk))?" warn":"");
     const fit=document.createElement("div");fit.className="tools";
-    const bf=document.createElement("button");bf.className="btn";bf.type="button";bf.textContent="Adatta alla traccia";bf.disabled=!c.on;
+    const bf=document.createElement("button");bf.className="btn";bf.type="button";bf.textContent="Fit to trace";bf.disabled=!c.on;
     bf.onclick=()=>{fitChannel(f,k);renderCards();draw()};
-    const bo=document.createElement("button");bo.className="btn";bo.type="button";bo.textContent="Come sullo strumento";bo.disabled=!c.on;
+    const bo=document.createElement("button");bo.className="btn";bo.type="button";bo.textContent="As on the scope";bo.disabled=!c.on;
     bo.onclick=()=>{c.dispV=c.vdiv;c.dispPos=c.zeroDiv;renderCards();draw()};
     fit.append(bf,bo);el.appendChild(fit);
-    src.textContent=!c.on?"Canale spento al momento del salvataggio: nessun dato":(c.vOk&&c.zOk)?"Sullo strumento: "+fmtV(c.vdiv)+"/div, zero a "+(+c.zeroDiv.toFixed(2))+" div dal basso":"Da verificare: "+[!c.vOk&&"V/div",!c.zOk&&"zero"].filter(Boolean).join(" e ")+" non leggibili, valori di ripiego";
+    src.textContent=!c.on?"Channel was off when the file was saved: no data":(c.vOk&&c.zOk)?"On the scope: "+fmtV(c.vdiv)+"/div, zero at "+(+c.zeroDiv.toFixed(2))+" div from the bottom":"Check: "+[!c.vOk&&"V/div",!c.zOk&&"zero"].filter(Boolean).join(" and ")+" not readable, using fallback values";
     if(!c.on)chk.querySelector("input").disabled=true;
     el.appendChild(src);
     const dl=document.createElement("dl");dl.className="stats";dl.id="st"+k;el.appendChild(dl);
@@ -349,8 +349,8 @@ function renderCards(){
 function step125(x,dir){const e=Math.pow(10,Math.floor(Math.log10(x)+1e-9)),m=x/e,seq=[1,2,5,10];
   if(dir>0)return seq.find(q=>q>m*1.001)*e;for(let i=seq.length-1;i>=0;i--)if(seq[i]<m*0.999)return seq[i]*e;return 0.5*e}
 function ceil125(x){const e=Math.pow(10,Math.floor(Math.log10(x)));for(const m of [1,2,5,10])if(m*e>=x*0.999)return m*e;return 10*e}
-// Valori per divisione mostrati con l'unità adatta (V, mV, µV; s, ms, µs, ns): il campo
-// contiene al massimo 4 cifre e l'unità sta nell'etichetta sopra.
+// Per-division values shown in a suitable unit (V, mV, µV; s, ms, µs, ns): the field
+// holds at most 4 digits and the unit goes in the label above it.
 const UNITS={V:[[1,"V"],[1e-3,"mV"],[1e-6,"µV"]],s:[[1,"s"],[1e-3,"ms"],[1e-6,"µs"],[1e-9,"ns"]]};
 function showScaled(inp,lab,x,base){const u=UNITS[base];let [f,n]=u[u.length-1];for(const [uf,un] of u)if(x>=uf*0.9995){f=uf;n=un;break}
   inp.value=+(x/f).toPrecision(4);inp.dataset.f=f;lab.textContent=n+"/div"}
@@ -361,7 +361,7 @@ function knobField(label,id,val,on){
   const k=document.createElement("span");k.className="knob";
   const i=document.createElement("input");i.type="number";i.step="any";i.min="0";i.id=id;i.setAttribute("aria-label",label);
   const set=x=>{showScaled(i,lab,x,"V");on(x)};
-  const mk=(t,dir)=>{const b=document.createElement("button");b.className="btn";b.type="button";b.textContent=t;b.setAttribute("aria-label",(dir>0?"Più ":"Meno ")+label);
+  const mk=(t,dir)=>{const b=document.createElement("button");b.className="btn";b.type="button";b.textContent=t;b.setAttribute("aria-label",(dir>0?"More ":"Less ")+label);
     b.onclick=()=>{const x=readScaled(i);if(x>0)set(step125(x,dir))};return b};
   i.onchange=()=>{const x=readScaled(i);if(x>0)set(x)};
   i.onkeydown=e=>{if(e.key==="ArrowUp"||e.key==="ArrowDown"){e.preventDefault();const x=readScaled(i);if(x>0)set(step125(x,e.key==="ArrowUp"?1:-1))}};
@@ -381,8 +381,8 @@ function updateStats(){
     let mn=Infinity,mx=-Infinity,s=0,n=0,cl=0;
     for(let i=view[0];i<=view[1];i++){const v=volts(f,k,i);if(!isFinite(v))continue;mn=Math.min(mn,v);mx=Math.max(mx,v);s+=v;n++;if(clipped(f,k,i))cl++}
     if(!n){dl.innerHTML="";return}
-    const rows=[["Min",fmtV(mn)],["Max",fmtV(mx)],["Media",fmtV(s/n)],["Picco-picco",fmtV(mx-mn)]];
-    if(cl)rows.push(["Fuori schermo",(100*cl/n).toFixed(1)+" %"]);
+    const rows=[["Min",fmtV(mn)],["Max",fmtV(mx)],["Mean",fmtV(s/n)],["Peak-peak",fmtV(mx-mn)]];
+    if(cl)rows.push(["Off screen",(100*cl/n).toFixed(1)+" %"]);
     dl.innerHTML="";rows.forEach(([a,b])=>{const t=document.createElement("dt");t.textContent=a;const d=document.createElement("dd");d.textContent=b;dl.append(t,d)});
   });
 }
@@ -391,39 +391,39 @@ function syncInputs(){
   const f=files[cur];
   const d=dt(f);
   showScaled($("tdiv"),$("tdivu"),vspan()*d/HDIV,"s");
-  $("npts").value=f.rateOk?fmtRate(1/d):"stimato";
-  // Da/A nell'unità adatta alla durata dell'acquisizione; le frecce si muovono di 1/12 dell'acquisizione
+  $("npts").value=f.rateOk?fmtRate(1/d):"estimated";
+  // From/To in the unit that suits the acquisition length; the arrows step by 1/12 of the acquisition
   const tot=f.per*d,u=UNITS.s.find(([uf])=>tot>=uf*0.9995)||UNITS.s[UNITS.s.length-1],uf=u[0];
   $("t0u").textContent=$("t1u").textContent=u[1];
   for(const id of ["t0","t1"]){const e=$(id);e.dataset.f=uf;e.min=0;e.max=+(tot/uf).toPrecision(6);e.step=+(tot/HDIV/uf).toPrecision(6)}
   $("t0").value=+(view[0]*d/uf).toPrecision(6);$("t1").value=+((view[1]+1)*d/uf).toPrecision(6);
-  // barra di scorrimento quando la vista è più stretta dell'acquisizione
+  // scroll bar when the view is narrower than the acquisition
   const zoomed=vspan()<f.per,pb=$("panbar");
   if(pb.hidden===zoomed){pb.hidden=!zoomed;requestAnimationFrame(resize)}
   $("pan").max=f.per-vspan();$("pan").value=view[0];$("pan").step=1;
   $("acqrow").hidden=f.nacq<2;
-  if(f.nacq>1){const s=$("acq");if(s.options.length!==f.nacq){s.textContent="";for(let a=0;a<f.nacq;a++){const o=document.createElement("option");o.value=a;o.textContent=(a+1)+"/"+f.nacq+(a===0?" schermo":"");s.appendChild(o)}}
-    s.value=f.acq;$("acqnote").textContent=f.acq===0?"Quella che si vedeva sullo schermo.":"Un'altra acquisizione della stessa finestra, salvata insieme alla prima."}
+  if(f.nacq>1){const s=$("acq");if(s.options.length!==f.nacq){s.textContent="";for(let a=0;a<f.nacq;a++){const o=document.createElement("option");o.value=a;o.textContent=(a+1)+"/"+f.nacq+(a===0?" screen":"");s.appendChild(o)}}
+    s.value=f.acq;$("acqnote").textContent=f.acq===0?"The one the screen showed.":"Another acquisition of the same window, saved together with the first."}
   $("tsrc").className="src"+(f.tOk?"":" warn");
-  $("tsrc").textContent=!f.tOk?"Da verificare: base dei tempi non leggibile, uso 1 s/div":f.rateOk?"Base dei tempi e passo di campionamento ("+fmtT(f.dtS)+") letti dal file":"Base dei tempi letta dal file; passo stimato a 1000 punti per divisione";
+  $("tsrc").textContent=!f.tOk?"Check: time base not readable, using 1 s/div":f.rateOk?"Time base and sample interval ("+fmtT(f.dtS)+") read from the file":"Time base read from the file; sample interval estimated at 1000 points per division";
   $("fname").textContent=f.name;
 
 }
 function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 
-/* ---------- disegno ---------- */
+/* ---------- drawing ---------- */
 const cv=$("cv"), ctx=cv.getContext("2d");
 function geom(){
   const W=cv.width,H=cv.height,dpr=W/cv.clientWidth||1;
-  // con le tracce sovrapposte la scala di CH2 va a destra: serve lo stesso margine
+  // with overlaid traces CH2's scale goes on the right: it needs the same margin
   const f=files[cur], right=overlay&&f&&f.ch[0].show&&f.ch[1].show;
   const L=Math.round(62*dpr),R=Math.round((right?62:14)*dpr),T=Math.round(10*dpr),B=Math.round(28*dpr);
-  const S=f&&f.dec?Math.round((f.dec.lanes.length*LANE_H+6)*dpr):0;   // fascia della decodifica sotto la griglia
+  const S=f&&f.dec?Math.round((f.dec.lanes.length*LANE_H+6)*dpr):0;   // decoding band below the grid
   return {W,H,dpr,L,R,T,B,S,pw:W-L-R,ph:H-T-B-S};
 }
-// Altezza del grafico. I pixel del canvas seguono sempre la dimensione a schermo (× dpr),
-// quindi non c'è mai stiramento. Vista in volt: alto quanto la colonna dei comandi, senza
-// superare la finestra. Vale sia per le tracce separate sia per quelle sovrapposte.
+// Plot height. The canvas pixels always follow the on-screen size (× dpr), so nothing is
+// ever stretched. As tall as the control column, without exceeding the window, for both
+// separate and overlaid traces.
 function resize(){
   const r=cv.getBoundingClientRect();if(!r.width)return;
   const dpr=Math.min(window.devicePixelRatio||1,2), cssW=r.width;
@@ -448,7 +448,7 @@ function drawEmpty(){
   const W=cv.width,H=cv.height,dpr=W/cv.clientWidth||1;
   ctx.fillStyle=css("--screen");ctx.fillRect(0,0,W,H);
   ctx.fillStyle=css("--screen-fg");ctx.textAlign="center";ctx.textBaseline="middle";ctx.font=(14*dpr)+"px "+css("--f-body");
-  ctx.fillText(SERVED?"Apri un file .wav oppure scaricalo dall'oscilloscopio":"Apri un file .wav o trascinalo qui",W/2,H/2)}
+  ctx.fillText(SERVED?"Open a .wav file or download one from the scope":"Open a .wav file or drop it here",W/2,H/2)}
 function draw(){
   const f=files[cur];if(!f){drawEmpty();return}
   $("tb").innerHTML="<b>"+fmtDiv(+(vspan()*dt(f)/HDIV).toPrecision(3))+"/div</b> · "+f.ch.map((c,k)=>c.on&&c.show?'<span class="c'+(k+1)+'">'+escapeHtml(c.name)+" "+fmtV(c.dispV)+"/div</span>":"").filter(Boolean).join(" · ");
@@ -456,11 +456,11 @@ function draw(){
   ctx.fillStyle=css("--screen");ctx.fillRect(0,0,g.W,g.H);
   const shown=[0,1].filter(k=>f.ch[k].show);laneY={};
   const i0=view[0],i1=view[1],d=dt(f);
-  const xOf=i=>g.L+(i-i0)/(i1-i0+1)*g.pw;   // ogni campione occupa un intervallo dt
+  const xOf=i=>g.L+(i-i0)/(i1-i0+1)*g.pw;   // each sample takes one dt interval
   ctx.font=(11*g.dpr)+"px "+css("--f-mono");
-  // asse dei tempi
-  // 12 divisioni orizzontali come sullo schermo dello strumento; etichette ogni 1, 2 o 3
-  // divisioni a seconda dello spazio, linea centrale più marcata
+  // time axis
+  // 12 horizontal divisions as on the scope's screen; labels every 1, 2 or 3 divisions
+  // depending on the space, centre line stronger
   const span=(i1-i0+1)*d, dw=g.pw/HDIV, lab=Math.max(1,Math.ceil(80*g.dpr/dw)), every=lab>2?(lab>3?4:3):lab;
   ctx.lineWidth=1;ctx.textAlign="center";ctx.textBaseline="top";
   let lastR=-Infinity;
@@ -497,8 +497,8 @@ function draw(){
   if(hover!=null){const x=Math.round(xOf(hover))+.5;ctx.strokeStyle=css("--screen-fg");ctx.setLineDash([4*g.dpr,4*g.dpr]);ctx.beginPath();ctx.moveTo(x,g.T);ctx.lineTo(x,g.T+g.ph);ctx.stroke();ctx.setLineDash([])}
 }
 function drawOverlay(f,g,xOf,shown){
-  // Una sola griglia di 8 divisioni; ogni canale usa il suo V/div e il suo zero.
-  // Scala di CH1 a sinistra, di CH2 a destra, ciascuna nel colore del canale.
+  // A single 8-division grid; each channel uses its own V/div and zero.
+  // CH1's scale on the left, CH2's on the right, each in the channel's colour.
   for(let j=0;j<=VDIV;j++){const y=Math.round(g.T+j*g.ph/VDIV)+.5;ctx.strokeStyle=j===VDIV/2?css("--grid-major"):css("--grid");ctx.beginPath();ctx.moveTo(g.L,y);ctx.lineTo(g.L+g.pw,y);ctx.stroke()}
   ctx.strokeStyle=css("--grid-major");ctx.strokeRect(g.L+.5,g.T+.5,g.pw-1,g.ph-1);
   const every=g.ph/VDIV<16*g.dpr?2:1;
@@ -517,7 +517,7 @@ function drawOverlay(f,g,xOf,shown){
     trace(f,k,xOf,yOf,g);ctx.restore();
     ctx.fillStyle=col;ctx.textAlign=rightSide?"right":"left";ctx.textBaseline="top";ctx.font="600 "+(12*g.dpr)+"px "+css("--f-mono");
     const label=c.name+"  "+fmtV(vd)+"/div", lw=ctx.measureText(label).width;
-    const down=rightSide&&leftW+lw+24*g.dpr>g.pw?16*g.dpr:0;   // poco spazio: CH2 sulla riga sotto
+    const down=rightSide&&leftW+lw+24*g.dpr>g.pw?16*g.dpr:0;   // little room: CH2 on the line below
     ctx.fillText(label,rightSide?g.L+g.pw-8*g.dpr:g.L+8*g.dpr,g.T+6*g.dpr+down);if(!rightSide)leftW=lw;
     ctx.font=(11*g.dpr)+"px "+css("--f-mono");
   });
@@ -533,12 +533,12 @@ function trace(f,k,xOf,yOf,g){
   ctx.stroke();
 }
 
-/* ---------- decodifica dei bus: I²C, UART, 1-Wire ---------- */
-// Ogni canale viene digitalizzato con una soglia (automatica: metà escursione) e un'isteresi
-// del 5 % dell'escursione. Ogni decodificatore restituisce:
-//   lanes: righe della fascia sotto il grafico, ciascuna con annotazioni {i0,i1,kind,label,short,ok}
-//   rows:  messaggi per l'elenco {i0,i1,parts:[{t,bad}]}
-//   thr:   soglia usata per canale, info/warn: testo sotto i comandi
+/* ---------- bus decoding: I²C, UART, 1-Wire ---------- */
+// Each channel is turned into logic levels with a threshold (automatic: mid-swing) and a
+// hysteresis of 5 % of the swing. Each decoder returns:
+//   lanes: rows of the band below the plot, each with annotations {i0,i1,kind,label,short,ok}
+//   rows:  messages for the list {i0,i1,parts:[{t,bad}]}
+//   thr:   threshold used per channel, info/warn: text below the controls
 function chRange(f,k){let mn=Infinity,mx=-Infinity;for(let i=0;i<f.per;i++){const v=volts(f,k,i);if(isFinite(v)){if(v<mn)mn=v;if(v>mx)mx=v}}return [mn,mx]}
 function hex2(v,w){return "0x"+v.toString(16).toUpperCase().padStart(w||2,"0")}
 function hx(v,w){return v.toString(16).toUpperCase().padStart(w||2,"0")}
@@ -550,9 +550,9 @@ function digit(f,k){
 function edges(d){const e=[];for(let i=1;i<d.length;i++)if(d[i]>=0&&d[i-1]>=0&&d[i]!==d[i-1])e.push(i);return e}
 
 // ---- I²C ----
-// START = SDA scende con SCL alto, STOP = SDA sale con SCL alto; a ogni fronte di salita di SCL
-// si legge un bit di SDA; 9 bit = 8 di dati (MSB prima) + ACK (0) / NACK (1). Il primo byte
-// dopo uno START è l'indirizzo a 7 bit più R/W.
+// START = SDA falls while SCL is high, STOP = SDA rises while SCL is high; one SDA bit is read
+// on each rising edge of SCL; 9 bits = 8 data bits (MSB first) + ACK (0) / NACK (1). The first
+// byte after a START is the 7-bit address plus R/W.
 function decI2C(f){
   const n=f.per,A=digit(f,dec.scl),B=digit(f,dec.sda),C=A.d,D=B.d;
   const ann=[],rows=[];let inF=false,bits=[],bi=[],nb=0,row=null;const rises=[];
@@ -573,15 +573,15 @@ function decI2C(f){
           row.parts.push({t:(first?"["+label+"]":label)+(ack?"":" NACK"),bad:!ack});row.i1=bi[8];nb++;bits=[];bi=[]}}}}
   let per=null;if(rises.length>4){const dd=[];for(let j=1;j<rises.length;j++)dd.push(rises[j]-rises[j-1]);dd.sort((a,b)=>a-b);per=dd[dd.length>>2]}
   const thr=[];thr[dec.scl]=A.t;thr[dec.sda]=B.t;
-  let info=(rows.length?plural(rows.length,"messaggio","messaggi"):"Nessun messaggio trovato"),warn="";
-  if(rows.length&&per){info+=" · SCL circa "+fmtF(1/(per*dt(f)))+" ("+Math.round(per)+" campioni per periodo)";
-    if(per<8)warn="Campionamento troppo lento per questo bus: con meno di 8 campioni per periodo di SCL i bit possono essere letti male, usa una base dei tempi più veloce."}
-  if(inF)info+=". L'ultimo messaggio continua oltre la fine dell'acquisizione";
+  let info=(rows.length?plural(rows.length,"message","messages"):"No messages found"),warn="";
+  if(rows.length&&per){info+=" · SCL about "+fmtF(1/(per*dt(f)))+" ("+Math.round(per)+" samples per period)";
+    if(per<8)warn="Sample rate too low for this bus: with fewer than 8 samples per SCL period bits can be misread, use a faster time base."}
+  if(inF)info+=". The last message runs past the end of the acquisition";
   return {lanes:[{name:"I²C",ann}],rows,thr,info,warn}}
 
 // ---- UART ----
-// Riposo alto (livelli TTL) o basso (RS-232 invertito). Il fronte di discesa è il bit di start;
-// ogni bit si legge al centro: dati LSB prima, parità facoltativa, stop che deve essere alto.
+// Idle high (TTL levels) or low (inverted RS-232). The falling edge is the start bit; each
+// bit is read at its centre: data LSB first, optional parity, a stop bit that must be high.
 const BAUDS=[300,600,1200,2400,4800,9600,14400,19200,28800,31250,38400,57600,76800,115200,230400,250000,460800,500000,921600,1000000,2000000];
 function estBaud(f,ds){
   const iv=[];ds.forEach(d=>{const e=edges(d);for(let j=1;j<e.length;j++)iv.push(e[j]-e[j-1])});
@@ -593,7 +593,7 @@ function decUART(f,chans){
   const D=chans.map(k=>digit(f,k));
   const baud=dec.baud==="auto"?estBaud(f,D.map(x=>x.d)):+dec.baud;
   const thr=[];chans.forEach((k,j)=>thr[k]=D[j].t);
-  if(!baud)return {lanes:chans.map(k=>({name:f.ch[k].name,ann:[]})),rows:[],thr,info:"Nessuna trasmissione trovata",warn:""};
+  if(!baud)return {lanes:chans.map(k=>({name:f.ch[k].name,ann:[]})),rows:[],thr,info:"No transmission found",warn:""};
   const bl=1/(baud*dt(f)),nbits=+dec.bits,stop=+dec.stop,inv=dec.inv==="1",par=dec.par,n=f.per;
   const lanes=[],rows=[];let nerr=0,nbytes=0;
   chans.forEach((k,j)=>{
@@ -620,17 +620,17 @@ function decUART(f,chans){
   rows.sort((a,b)=>a.i0-b.i0);
   const esc=v=>v===13?"\\r":v===10?"\\n":v===9?"\\t":v>=32&&v<127?String.fromCharCode(v):"·";
   rows.forEach(r=>{r.parts=[{t:f.ch[r.ch].name+":"},...r.bytes.map(b=>({t:hx(b.v)+(b.ferr?"(FE)":b.perr?"(PE)":""),bad:!(b.ok)})),{t:'"'+r.bytes.map(b=>esc(b.v)).join("")+'"'}]});
-  let info=plural(nbytes,"carattere","caratteri")+" a "+(baud>=1000?+(baud/1000).toPrecision(4)+" k":baud+" ")+"baud ("+(dec.baud==="auto"?"stimata":"impostata")+")"+
-    " · "+nbits+(par==="none"?"N":par==="even"?"E":"O")+(stop===1.5?"1,5":stop),warn="";
-  if(nerr)info+=" · "+plural(nerr,"errore","errori")+" (FE = stop mancante, PE = parità)";
-  if(bl<4)warn="Campionamento troppo lento per questa velocità: servono almeno 4 campioni per bit (ora "+bl.toFixed(1)+"), usa una base dei tempi più veloce.";
-  if(nerr&&nbytes&&nerr/nbytes>0.3)warn+=(warn?" ":"")+"Molti errori: controlla velocità, parità, numero di bit e livelli.";
+  let info=plural(nbytes,"character","characters")+" at "+(baud>=1000?+(baud/1000).toPrecision(4)+" k":baud+" ")+"baud ("+(dec.baud==="auto"?"estimated":"set")+")"+
+    " · "+nbits+(par==="none"?"N":par==="even"?"E":"O")+stop,warn="";
+  if(nerr)info+=" · "+plural(nerr,"error","errors")+" (FE = missing stop bit, PE = parity)";
+  if(bl<4)warn="Sample rate too low for this baud rate: at least 4 samples per bit are needed (now "+bl.toFixed(1)+"), use a faster time base.";
+  if(nerr&&nbytes&&nerr/nbytes>0.3)warn+=(warn?" ":"")+"Many errors: check baud rate, parity, data bits and levels.";
   return {lanes,rows,thr,info,warn}}
 
-// ---- 1-Wire (velocità standard) ----
-// Impulsi bassi: ≥ 380 µs reset; dopo il reset, un impulso di 60–240 µs del dispositivo è la
-// presenza; < 15 µs bit 1, 15–150 µs bit 0. Byte LSB prima. Il primo byte dopo il reset è il
-// comando ROM; dopo Skip ROM / Match ROM (8 byte di ROM) viene il comando di funzione.
+// ---- 1-Wire (standard speed) ----
+// Low pulses: ≥ 380 µs reset; after the reset, a 60–240 µs pulse from the device is the
+// presence pulse; < 15 µs bit 1, 15–150 µs bit 0. Bytes LSB first. The first byte after the
+// reset is the ROM command; after Skip ROM / Match ROM (8 ROM bytes) comes the function command.
 const OW_ROM={0x33:"Read ROM",0x55:"Match ROM",0xCC:"Skip ROM",0xF0:"Search ROM",0xEC:"Alarm Search",0x3C:"Overdrive Skip",0x69:"Overdrive Match"};
 const OW_FN={0x44:"Convert T",0xBE:"Read Scratchpad",0x4E:"Write Scratchpad",0x48:"Copy Scratchpad",0xB8:"Recall E²",0xB4:"Read Power Supply"};
 function crc8(bs){let c=0;for(let x of bs){for(let b=0;b<8;b++){const m=(c^x)&1;c>>=1;if(m)c^=0x8C;x>>=1}}return c}
@@ -647,19 +647,19 @@ function decOW(f,k){
     if(!tr)continue;
     const gap=(p0-lastResetEnd)*us;
     if(lastResetEnd>=0&&!tr.presence&&tr.bytes.length===0&&bits.length===0&&gap>=10&&gap<=80&&w>=50&&w<=260){
-      tr.presence=true;ann.push({i0:p0,i1:p1,kind:"box",label:"Presenza",short:"P",ok:true});tr.i1=p1;continue}
+      tr.presence=true;ann.push({i0:p0,i1:p1,kind:"box",label:"Presence",short:"P",ok:true});tr.i1=p1;continue}
     if(w<15)bits.push(1);else if(w<=150)bits.push(0);else{tr.bad++;continue}
     bi.push(p0);tr.i1=p1;if(bits.length===8)finishByte()}
-  // interpretazione dei comandi
+  // command interpretation
   rows.forEach(t=>{
-    t.parts=[{t:"Reset"},t.presence?{t:"presenza"}:{t:"nessuna presenza",bad:true}];
+    t.parts=[{t:"Reset"},t.presence?{t:"presence"}:{t:"no presence",bad:true}];
     const by=t.bytes;let j=0,fn=null;
     const lab=(b,txt,ok=true)=>{ann.push({i0:b.i0,i1:b.i1+Math.round(60/us),kind:"box",label:txt,short:hx(b.v),ok})};
     if(!by.length)return;
-    const rom=by[0].v;lab(by[0],hx(rom)+" "+(OW_ROM[rom]||"?"));t.parts.push({t:hx(rom)+" "+(OW_ROM[rom]||"comando ROM sconosciuto")});j=1;
-    if(rom===0xF0||rom===0xEC){t.parts.push({t:"(la ricerca usa bit singoli: i byte successivi non sono decodificati)"});return}
+    const rom=by[0].v;lab(by[0],hx(rom)+" "+(OW_ROM[rom]||"?"));t.parts.push({t:hx(rom)+" "+(OW_ROM[rom]||"unknown ROM command")});j=1;
+    if(rom===0xF0||rom===0xEC){t.parts.push({t:"(search uses single bits: the following bytes are not decoded)"});return}
     if(rom===0x55||rom===0x33){const id=by.slice(j,j+8);id.forEach(b=>lab(b,hx(b.v)));
-      if(id.length===8){const ok=crc8(id.slice(0,7).map(b=>b.v))===id[7].v;t.parts.push({t:"ROM "+id.map(b=>hx(b.v)).join(" ")+(ok?" (CRC ok)":" (CRC errato)"),bad:!ok})}
+      if(id.length===8){const ok=crc8(id.slice(0,7).map(b=>b.v))===id[7].v;t.parts.push({t:"ROM "+id.map(b=>hx(b.v)).join(" ")+(ok?" (CRC ok)":" (CRC bad)"),bad:!ok})}
       j+=8;if(rom===0x33)return}
     if(j<by.length){fn=by[j].v;lab(by[j],hx(fn)+" "+(OW_FN[fn]||""));t.parts.push({t:hx(fn)+(OW_FN[fn]?" "+OW_FN[fn]:"")});j++}
     const rest=by.slice(j);rest.forEach(b=>lab(b,hx(b.v)));
@@ -667,13 +667,13 @@ function decOW(f,k){
       let note="";
       if(fn===0xBE&&rest.length>=9){const sp=rest.slice(0,9).map(b=>b.v),ok=crc8(sp.slice(0,8))===sp[8];
         let raw=sp[0]|(sp[1]<<8);if(raw&0x8000)raw-=0x10000;
-        note=(ok?" (CRC ok":" (CRC errato")+"; se è un DS18B20: "+(raw/16).toFixed(4).replace(/0+$/,"").replace(/\.$/,"")+" °C)";
-        t.parts.push({t:"dati "+rest.map(b=>hx(b.v)).join(" ")+note,bad:!ok})}
-      else t.parts.push({t:"dati "+rest.map(b=>hx(b.v)).join(" ")})}
-    if(t.bad)t.parts.push({t:plural(t.bad,"impulso non riconosciuto","impulsi non riconosciuti"),bad:true})});
+        note=(ok?" (CRC ok":" (CRC bad")+"; if it is a DS18B20: "+(raw/16).toFixed(4).replace(/0+$/,"").replace(/\.$/,"")+" °C)";
+        t.parts.push({t:"data "+rest.map(b=>hx(b.v)).join(" ")+note,bad:!ok})}
+      else t.parts.push({t:"data "+rest.map(b=>hx(b.v)).join(" ")})}
+    if(t.bad)t.parts.push({t:plural(t.bad,"unrecognised pulse","unrecognised pulses"),bad:true})});
   const thr=[];thr[k]=A.t;
-  let info=rows.length?plural(rows.length,"transazione","transazioni"):"Nessun reset trovato",warn="";
-  if(us>3)warn="Campionamento troppo lento per il 1-Wire: servono campioni ogni 3 µs o meno (ora "+us.toFixed(1)+" µs), usa una base dei tempi più veloce.";
+  let info=rows.length?plural(rows.length,"transaction","transactions"):"No reset found",warn="";
+  if(us>3)warn="Sample rate too low for 1-Wire: samples every 3 µs or less are needed (now "+us.toFixed(1)+" µs), use a faster time base.";
   return {lanes:[{name:f.ch[k].name,ann}],rows,thr,info,warn}}
 
 function plural(n,a,b){return n+" "+(n===1?a:b)}
@@ -691,21 +691,21 @@ function refreshDecode(auto){
   const nm=k=>f.ch[k].name;
   fill("decscl",dec.scl,[[0,nm(0)],[1,nm(1)]]);fill("decsda",dec.sda,[[0,nm(0)],[1,nm(1)]]);
   fill("owch",dec.owch,on.map(k=>[k,nm(k)]));
-  fill("uch",dec.uch,(on.length===2?[["both",nm(0)+" e "+nm(1)]]:[]).concat(on.map(k=>[String(k),"Solo "+nm(k)])));
+  fill("uch",dec.uch,(on.length===2?[["both",nm(0)+" and "+nm(1)]]:[]).concat(on.map(k=>[String(k),"Only "+nm(k)])));
   $("decopts").hidden=!p;["i2c","uart","ow"].forEach(q=>$("o-"+q).hidden=p!==q);
   let res=null,need="";
-  if(p==="i2c"){if(on.length<2)need="Per l'I²C servono entrambi i canali accesi.";else if(dec.scl===dec.sda)need="SCL e SDA devono essere canali diversi.";else res=decI2C(f)}
-  else if(p==="uart"){const ch=dec.uch==="both"?on:[+dec.uch].filter(k=>on.includes(k));if(!ch.length)need="Nessun canale acceso.";else res=decUART(f,ch)}
-  else if(p==="ow"){if(!on.includes(dec.owch))need="Nessun canale acceso.";else res=decOW(f,dec.owch)}
+  if(p==="i2c"){if(on.length<2)need="I²C needs both channels on.";else if(dec.scl===dec.sda)need="SCL and SDA must be different channels.";else res=decI2C(f)}
+  else if(p==="uart"){const ch=dec.uch==="both"?on:[+dec.uch].filter(k=>on.includes(k));if(!ch.length)need="No channel is on.";else res=decUART(f,ch)}
+  else if(p==="ow"){if(!on.includes(dec.owch))need="No channel is on.";else res=decOW(f,dec.owch)}
   f.dec=res;
   $("decnone").hidden=!need;$("decnone").textContent=need;
-  [0,1].forEach(k=>{const used=res&&res.thr[k]!==undefined;$("thrw"+k).hidden=!used;if(used){$("thr"+k).value=+res.thr[k].toFixed(3);$("thrl"+k).textContent="Soglia "+nm(k)}});
+  [0,1].forEach(k=>{const used=res&&res.thr[k]!==undefined;$("thrw"+k).hidden=!used;if(used){$("thr"+k).value=+res.thr[k].toFixed(3);$("thrl"+k).textContent=nm(k)+" threshold"}});
   $("decinfo").textContent=res?res.info+(res.warn?". "+res.warn:"."):"";$("decinfo").className="src"+(res&&res.warn?" warn":"");
   const L=$("declist");L.textContent="";
   if(res)res.rows.forEach(row=>{const li=document.createElement("li"),b=document.createElement("button");b.type="button";
     const t=document.createElement("span");t.className="t";t.textContent=fmtT(row.i0*dt(f),f.per*dt(f));b.appendChild(t);
     row.parts.forEach((x,j)=>{const sp=document.createElement("span");sp.textContent=(j?" ":"")+x.t;if(x.bad)sp.className="nack";b.appendChild(sp)});
-    b.title="Ingrandisci questo messaggio";
+    b.title="Zoom to this message";
     b.onclick=()=>{const m=Math.max(20,Math.round((row.i1-row.i0)*0.08));view=[Math.max(0,row.i0-m),Math.min(f.per-1,row.i1+m)];syncInputs();updateStats();draw()};
     li.appendChild(b);L.appendChild(li)});
   resize()}
@@ -738,9 +738,9 @@ $("owch").onchange=e=>{dec.owch=+e.target.value;refreshDecode()};
 [0,1].forEach(k=>{$("thr"+k).onchange=e=>{const x=parseFloat(String(e.target.value).replace(",","."));if(isFinite(x)){dec.thr[k]=x;refreshDecode()}}});
 $("thrauto").onclick=()=>{dec.thr=[null,null];refreshDecode()};
 $("deccopy").onclick=async()=>{const f=files[cur];if(!f||!f.dec)return;const t=f.dec.rows.map(r=>rowText(f,r)).join("\n")+"\n";
-  try{await navigator.clipboard.writeText(t);$("decinfo").textContent="Decodifica copiata negli appunti ("+plural(f.dec.rows.length,"riga","righe")+")."}catch(e){$("decinfo").textContent="Gli appunti non sono disponibili qui."}};
+  try{await navigator.clipboard.writeText(t);$("decinfo").textContent="Decoding copied to the clipboard ("+plural(f.dec.rows.length,"line","lines")+")."}catch(e){$("decinfo").textContent="The clipboard is not available here."}};
 
-/* ---------- cursori ---------- */
+/* ---------- cursors ---------- */
 function drawCursors(f,g,xOf){
   const d=dt(f),fg=css("--screen-fg");ctx.lineWidth=Math.max(1,g.dpr);ctx.font="600 "+(11*g.dpr)+"px "+css("--f-mono");
   const tag=(txt,x,y,col,align)=>{ctx.textAlign=align;ctx.textBaseline="top";const w=ctx.measureText(txt).width+6*g.dpr,h=14*g.dpr;
@@ -763,7 +763,7 @@ function updateCursorStats(){
   if(curT){const [a,b]=curT,dtt=b-a,sp=vspan()*dt(f);
     rows.push(["T1",fmtT(a,sp)],["T2",fmtT(b,sp)],["Δt",fmtT(dtt,Math.abs(dtt))],["1/Δt",dtt?fmtF(1/Math.abs(dtt)):"—"]);
     [0,1].forEach(k=>{const c=f.ch[k];if(!c.on||!c.show)return;const v1=vAt(f,k,a),v2=vAt(f,k,b);
-      rows.push([c.name+" in T1",fmtV(v1),k],[c.name+" in T2",fmtV(v2),k],[c.name+" Δ (T2−T1)",fmtV(v2-v1),k])})}
+      rows.push([c.name+" at T1",fmtV(v1),k],[c.name+" at T2",fmtV(v2),k],[c.name+" Δ (T2−T1)",fmtV(v2-v1),k])})}
   if(curV&&f.ch[curVch]){const [a,b]=curV,n=f.ch[curVch].name;
     rows.push(["V1 ("+n+")",fmtV(a),curVch],["V2 ("+n+")",fmtV(b),curVch],["ΔV (V2−V1)",fmtV(b-a),curVch])}
   const d=dt(f),inT=t=>t>=view[0]*d-1e-15&&t<=view[1]*d+1e-15,L=laneY[curVch];
@@ -804,14 +804,14 @@ function moveCursor(ev){
   else{const L=laneY[curVch];if(L)curV[curDrag.j]=L.vOf(Math.min(L.top+L.h,Math.max(L.top,y)))}
 }
 
-/* ---------- interazione ---------- */
+/* ---------- interaction ---------- */
 function idxAt(ev){const f=files[cur],g=geom(),r=cv.getBoundingClientRect();const x=(ev.clientX-r.left)*g.dpr;const i=Math.floor(view[0]+(x-g.L)/g.pw*vspan());return {i:Math.min(Math.max(i,view[0]),view[1]),x}}
-function vspan(){return view[1]-view[0]+1}   // campioni nella vista: 12 divisioni = vspan × dt
+function vspan(){return view[1]-view[0]+1}   // samples in the view: 12 divisions = vspan × dt
 cv.addEventListener("pointermove",ev=>{const f=files[cur];if(!f)return;
   if(curDrag)moveCursor(ev);else if(!drag){const h=cursorHit(ev);cv.style.cursor=h?(h.type==="t"?"ew-resize":"ns-resize"):"crosshair"}
   const {i,x}=idxAt(ev);hover=i;if(drag)drag.x1=x;
   const t=i*dt(f);const parts=['<span>t = '+fmtT(t,(view[1]-view[0])*dt(f)/10)+'</span>'];
-  [0,1].forEach(k=>{if(f.ch[k].show)parts.push('<span class="c'+(k+1)+'">'+escapeHtml(f.ch[k].name)+' = '+fmtV(volts(f,k,i))+(clipped(f,k,i)?" (fuori schermo)":"")+'</span>')});
+  [0,1].forEach(k=>{if(f.ch[k].show)parts.push('<span class="c'+(k+1)+'">'+escapeHtml(f.ch[k].name)+' = '+fmtV(volts(f,k,i))+(clipped(f,k,i)?" (off screen)":"")+'</span>')});
   if(drag){const a=idxAt({clientX:Math.min(drag.cx0,ev.clientX)}).i,b=idxAt({clientX:Math.max(drag.cx0,ev.clientX)}).i;parts.push("<span>Δt = "+fmtT((b-a)*dt(f))+"</span>")}
   $("readout").innerHTML=parts.join("");draw()});
 cv.addEventListener("pointerleave",()=>{hover=null;draw()});
@@ -822,7 +822,7 @@ cv.addEventListener("pointerup",ev=>{if(curDrag){curDrag=null;draw();return}if(!
   if(b-a>6){const i0=idxAt({clientX:a}).i,i1=idxAt({clientX:b}).i;if(i1-i0>=10){view=[i0,i1];syncInputs();updateStats()}}draw()});
 cv.addEventListener("dblclick",()=>{const f=files[cur];if(!f)return;view=[0,f.per-1];syncInputs();updateStats();draw()});
 $("reset").onclick=()=>cv.dispatchEvent(new Event("dblclick"));
-$("mode").onclick=e=>{overlay=!overlay;e.target.setAttribute("aria-pressed",overlay);e.target.textContent=overlay?"Tracce separate":"Sovrapponi le tracce";resize()};
+$("mode").onclick=e=>{overlay=!overlay;e.target.setAttribute("aria-pressed",overlay);e.target.textContent=overlay?"Separate traces":"Overlay traces";resize()};
 function setSdiv(x){const f=files[cur];if(!f||!(x>0))return;const d=dt(f);let n=Math.max(10,Math.round(HDIV*x/d));
   const mid=Math.round((view[0]+view[1]+1)/2);let a=mid-Math.round(n/2);if(n>f.per){a=0;n=f.per}
   a=Math.max(0,Math.min(a,f.per-n));view=[a,a+n-1];syncInputs();updateStats();draw()}
@@ -837,7 +837,7 @@ function panTo(a){const f=files[cur];if(!f)return;const n=vspan();a=Math.max(0,M
 $("pan").oninput=e=>panTo(+e.target.value);
 $("panl").onclick=()=>panTo(view[0]-vspan()/HDIV);
 $("panr").onclick=()=>panTo(view[0]+vspan()/HDIV);
-// trackpad: scorrimento orizzontale a due dita, oppure Maiusc + rotellina
+// trackpad: two-finger horizontal scroll, or Shift + mouse wheel
 cv.addEventListener("wheel",ev=>{const f=files[cur];if(!f||vspan()>=f.per)return;
   const dx=Math.abs(ev.deltaX)>Math.abs(ev.deltaY)?ev.deltaX:(ev.shiftKey?ev.deltaY:0);if(!dx)return;
   ev.preventDefault();panTo(view[0]+dx/cv.clientWidth*vspan())},{passive:false});
@@ -845,12 +845,12 @@ $("t0").onchange=setRange;$("t1").onchange=setRange;
 $("acq").onchange=e=>{const f=files[cur];if(!f)return;const a=+e.target.value;f.acq=a;
   f.raw=[f.all[0].subarray(a*f.per,(a+1)*f.per),f.all[1].subarray(a*f.per,(a+1)*f.per)];syncInputs();updateStats();refreshDecode()};
 
-/* ---------- file ---------- */
+/* ---------- files ---------- */
 function openMany(list){
-  // in ordine numerico (1, 2, … 10), saltando i file nascosti "._" creati da macOS
+  // in numeric order (1, 2, … 10), skipping the hidden "._" files macOS creates
   const fs=[...list].filter(f=>/\.wav$/i.test(f.name)&&!f.name.startsWith("._"));
   fs.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
-  if(!fs.length){setMsg("Nessun file .wav trovato.",true);return}
+  if(!fs.length){setMsg("No .wav files found.",true);return}
   Promise.all(fs.map(f=>f.arrayBuffer().then(b=>[f.name,b]))).then(r=>r.forEach(([n,b])=>addFile(n,b)));
 }
 $("file").onchange=e=>{openMany(e.target.files);e.target.value=""};
@@ -860,64 +860,64 @@ const drop=$("drop");
 ["dragleave","drop"].forEach(t=>document.addEventListener(t,e=>{e.preventDefault();if(t==="drop"||e.target===document.documentElement)drop.classList.remove("over")}));
 document.addEventListener("drop",e=>openMany(e.dataTransfer.files));
 
-/* ---------- esportazione ---------- */
+/* ---------- export ---------- */
 function csvText(){const f=files[cur],k=[0,1].filter(k=>f.ch[k].show),d=dt(f);
-  const lines=["tempo_s;"+k.map(j=>f.ch[j].name.replace(/;/g,",")+"_V").join(";")];
+  const lines=["time_s;"+k.map(j=>f.ch[j].name.replace(/;/g,",")+"_V").join(";")];
   for(let i=view[0];i<=view[1];i++)lines.push((i*d).toPrecision(8)+";"+k.map(j=>{const v=volts(f,j,i);return isFinite(v)?v.toFixed(5):""}).join(";"));
   return lines.join("\r\n")+"\r\n"}
 function baseName(){const f=files[cur];return f.name.replace(/\s*\(.*\)$/,"").replace(/\.wav$/i,"")+(f.acq?"_acq"+(f.acq+1):"")}
 function setMsg(t,err){$("msg").textContent=t;$("msg").className="msg"+(err?" err":"")}
 let dlNS=null;
-const LOCAL=!window.claude;   // aperto come file locale nel browser, fuori da claude.ai
+const LOCAL=!window.claude;   // opened as a local file in the browser, outside claude.ai
 (async()=>{if(LOCAL)return;try{dlNS=await window.claude.use("downloads")}catch(e){dlNS=null}
   if(!dlNS){$("csv").hidden=true;$("png").hidden=true}})();
 function saveLocal(filename,data){
   const url=URL.createObjectURL(data instanceof Blob?data:new Blob([data],{type:"text/csv"}));
   const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);setMsg("Salvato: "+filename);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);setMsg("Saved: "+filename);
 }
 async function save(filename,data){
   if(LOCAL){saveLocal(filename,data);return}
-  if(!dlNS){setMsg("Il salvataggio non è disponibile in questa vista: usa Copia CSV.",true);return}
-  try{await dlNS.save({filename,data});setMsg("Salvato: "+filename)}
-  catch(e){setMsg(e&&e.code==="declined"?"Salvataggio annullato.":"Salvataggio non riuscito ("+(e&&e.code||"errore")+").",e&&e.code!=="declined")}
+  if(!dlNS){setMsg("Saving is not available in this view: use Copy CSV.",true);return}
+  try{await dlNS.save({filename,data});setMsg("Saved: "+filename)}
+  catch(e){setMsg(e&&e.code==="declined"?"Save cancelled.":"Save failed ("+(e&&e.code||"error")+").",e&&e.code!=="declined")}
 }
-const noFile=()=>{if(files[cur])return false;setMsg("Apri prima un file .wav.",true);return true};
+const noFile=()=>{if(files[cur])return false;setMsg("Open a .wav file first.",true);return true};
 $("csv").onclick=()=>{if(!noFile())save(baseName()+".csv",csvText())};
 $("png").onclick=()=>{if(!noFile())cv.toBlob(b=>b&&save(baseName()+".png",b),"image/png")};
-$("copycmd").onclick=async()=>{try{await navigator.clipboard.writeText($("cmd").textContent);setMsg("Comando copiato negli appunti.")}catch(e){setMsg("Gli appunti non sono disponibili qui: seleziona il comando e copialo.",true)}};
-$("copy").onclick=async()=>{if(noFile())return;const t=csvText();try{await navigator.clipboard.writeText(t);setMsg("CSV copiato negli appunti ("+t.split("\n").length+" righe).")}catch(e){setMsg("Gli appunti non sono disponibili qui: usa Salva CSV.",true)}};
+$("copycmd").onclick=async()=>{try{await navigator.clipboard.writeText($("cmd").textContent);setMsg("Command copied to the clipboard.")}catch(e){setMsg("The clipboard is not available here: select the command and copy it.",true)}};
+$("copy").onclick=async()=>{if(noFile())return;const t=csvText();try{await navigator.clipboard.writeText(t);setMsg("CSV copied to the clipboard ("+t.split("\n").length+" lines).")}catch(e){setMsg("The clipboard is not available here: use Save CSV.",true)}};
 
-/* ---------- oscilloscopio collegato (solo con "fnirsi.py visore") ---------- */
+/* ---------- connected scope (only with "fnirsi.py viewer") ---------- */
 const SERVED=/^https?:$/.test(location.protocol)&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname);
 let busy=false, connected=null, gallery=[], galGen=0;
 function liveMsg(t,err){$("livemsg").textContent=t;$("livemsg").className="msg"+(err?" err":"")}
 async function api(path,body){
   const r=await fetch(path,body!==undefined?{method:"POST",headers:{"X-Fnirsi":"1","Content-Type":"application/json"},body:JSON.stringify(body)}:{cache:"no-store"});
   const j=await r.json().catch(()=>({}));
-  if(!r.ok)throw new Error(j.errore||("errore "+r.status));
+  if(!r.ok)throw new Error(j.error||("error "+r.status));
   return j}
 function fmtSize(n){return n>=1e6?(n/1e6).toFixed(1)+" MB":Math.round(n/1e3)+" kB"}
 function setButtons(){
   const on=!!connected&&!busy, sel=gallery.filter(g=>g.sel).length;
   $("reload").disabled=!on;$("eject").disabled=!on;
   $("dlscope").disabled=!on||!sel;$("delscope").disabled=!on||!sel;
-  $("dlscope").textContent=sel?"Scarica selezionati ("+sel+")":"Scarica selezionati";
-  $("delscope").textContent=sel?"Cancella dallo strumento ("+sel+")":"Cancella dallo strumento";
+  $("dlscope").textContent=sel?"Download selected ("+sel+")":"Download selected";
+  $("delscope").textContent=sel?"Delete from scope ("+sel+")":"Delete from scope";
   $("galtools").hidden=!gallery.length}
 function renderItem(g){
   const el=g.el;el.setAttribute("aria-checked",g.sel);el.querySelector("input").checked=g.sel;
   const b=el.querySelector(".badge");
-  if(g.copiato===undefined){b.textContent="…";b.className="badge";b.title=""}
-  else if(g.copiato){b.textContent="sul Mac";b.className="badge";b.title="Già copiato: misure/"+g.copiato}
-  else{b.textContent="nuovo";b.className="badge new";b.title="Non ancora copiato sul Mac"}}
+  if(g.local===undefined){b.textContent="…";b.className="badge";b.title=""}
+  else if(g.local){b.textContent="on this computer";b.className="badge";b.title="Already copied: "+g.local}
+  else{b.textContent="new";b.className="badge new";b.title="Not copied to this computer yet"}}
 function buildGallery(list){
   galGen++;const G=$("gallery");G.textContent="";
   gallery=list.map(x=>{
-    const el=document.createElement("div");el.className="thumb "+x.tipo;el.setAttribute("role","checkbox");el.tabIndex=0;
-    el.innerHTML='<div class="img">'+(x.tipo==="bmp"?"screenshot":"forma d'onda")+'</div><div class="nm"><input type="checkbox" tabindex="-1" aria-hidden="true"><span></span></div><div class="meta"><span></span><span class="badge">…</span></div>';
-    el.querySelector(".nm span").textContent=x.nome;el.querySelector(".meta span").textContent=fmtSize(x.dimensione);
-    const g={...x,sel:false,el,copiato:undefined};
+    const el=document.createElement("div");el.className="thumb "+x.type;el.setAttribute("role","checkbox");el.tabIndex=0;
+    el.innerHTML='<div class="img">'+(x.type==="bmp"?"screenshot":"waveform")+'</div><div class="nm"><input type="checkbox" tabindex="-1" aria-hidden="true"><span></span></div><div class="meta"><span></span><span class="badge">…</span></div>';
+    el.querySelector(".nm span").textContent=x.name;el.querySelector(".meta span").textContent=fmtSize(x.size);
+    const g={...x,sel:false,el,local:undefined};
     const tog=()=>{g.sel=!g.sel;renderItem(g);setButtons()};
     el.onclick=tog;el.onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();tog()}};
     G.appendChild(el);renderItem(g);return g});
@@ -925,77 +925,77 @@ function buildGallery(list){
 async function loadThumbs(gen){
   for(const g of gallery){
     if(gen!==galGen)return;
-    if(g.copiato!==undefined)continue;
+    if(g.local!==undefined)continue;
     try{
-      const r=await fetch("/api/miniatura?f="+encodeURIComponent(g.f),{cache:"no-store"});
+      const r=await fetch("/api/thumbnail?f="+encodeURIComponent(g.f),{cache:"no-store"});
       if(gen!==galGen)return;
       if(r.status===200||r.status===204){
-        g.copiato=decodeURIComponent(r.headers.get("X-Copiato")||"")||null;
-        if(r.status===200){const url=URL.createObjectURL(await r.blob());const im=document.createElement("img");im.alt="Miniatura di "+g.nome;im.src=url;
+        g.local=decodeURIComponent(r.headers.get("X-Local-Copy")||"")||null;
+        if(r.status===200){const url=URL.createObjectURL(await r.blob());const im=document.createElement("img");im.alt="Thumbnail of "+g.name;im.src=url;
           const box=g.el.querySelector(".img");box.textContent="";box.appendChild(im)}
         renderItem(g)}
-      else{const j=await r.json().catch(()=>({}));g.el.querySelector(".img").textContent="miniatura non letta";
-        if(r.status===504){liveMsg(j.errore||"Lettura bloccata.",true);return}}
+      else{const j=await r.json().catch(()=>({}));g.el.querySelector(".img").textContent="thumbnail not read";
+        if(r.status===504){liveMsg(j.error||"Read hung.",true);return}}
     }catch(e){return}
   }}
 async function loadGallery(){
-  try{const r=await api("/api/elenco");buildGallery(r.collegato?r.file:[])}
-  catch(e){liveMsg("Elenco non letto: "+e.message,true)}}
+  try{const r=await api("/api/list");buildGallery(r.connected?r.files:[])}
+  catch(e){liveMsg("File list not read: "+e.message,true)}}
 async function pollScope(){
   if(busy)return;
   try{
-    const s=await api("/api/stato");
-    $("scopestate").textContent=s.collegato?"Oscilloscopio collegato · "+(s.file_sullo_strumento??"?")+" file":"Oscilloscopio non collegato: attiva USB sharing e collega il cavo.";
-    if(s.collegato!==connected){connected=s.collegato;if(connected)loadGallery();else{galGen++;gallery=[];$("gallery").textContent=""}}
-  }catch(e){connected=null;$("scopestate").textContent="Il visore locale non risponde: è ancora aperto il terminale con fnirsi.py visore?"}
+    const s=await api("/api/status");
+    $("scopestate").textContent=s.connected?"Scope connected · "+(s.files_on_scope??"?")+" files":"Scope not connected: turn on USB sharing and plug in the cable.";
+    if(s.connected!==connected){connected=s.connected;if(connected)loadGallery();else{galGen++;gallery=[];$("gallery").textContent=""}}
+  }catch(e){connected=null;$("scopestate").textContent="The local viewer is not responding: is the terminal running fnirsi.py viewer still open?"}
   setButtons()}
 function addShot(name){
   const a=document.createElement("a");a.className="chip";a.href="/api/file/"+encodeURIComponent(name);a.target="_blank";a.rel="noopener";a.textContent=name;
-  a.title="Apri lo screenshot";$("shots").appendChild(a)}
+  a.title="Open the screenshot";$("shots").appendChild(a)}
 async function withBusy(label,fn){
   busy=true;setButtons();$("scopestate").textContent=label;liveMsg("");
   try{await fn()}catch(e){liveMsg(e.message,true)}
   busy=false;await pollScope()}
-$("dlscope").onclick=()=>withBusy("Copia in corso: non staccare il cavo…",async()=>{
+$("dlscope").onclick=()=>withBusy("Copying: do not unplug the cable…",async()=>{
   const sel=gallery.filter(g=>g.sel);
-  const r=await api("/api/scarica",{file:sel.map(g=>g.f)});
-  const byNum=(a,b)=>a.nome.localeCompare(b.nome,undefined,{numeric:true});
-  const wavs=r.file.filter(x=>x.tipo==="wav").sort(byNum), bmps=r.file.filter(x=>x.tipo==="bmp").sort(byNum);
+  const r=await api("/api/download",{files:sel.map(g=>g.f)});
+  const byNum=(a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true});
+  const wavs=r.files.filter(x=>x.type==="wav").sort(byNum), bmps=r.files.filter(x=>x.type==="bmp").sort(byNum);
   let last=-1;
   for(const x of wavs){
-    const b=await fetch("/api/file/"+encodeURIComponent(x.nome)).then(q=>{if(!q.ok)throw new Error(x.nome+" non leggibile");return q.arrayBuffer()});
-    const old=files.findIndex(f=>f.name===x.nome);
+    const b=await fetch("/api/file/"+encodeURIComponent(x.name)).then(q=>{if(!q.ok)throw new Error(x.name+" not readable");return q.arrayBuffer()});
+    const old=files.findIndex(f=>f.name===x.name);
     if(old>=0)files.splice(old,1);
-    try{const f=parse(x.nome,b);f.tag=x.nuovo?"nuovo":"";files.push(f);last=files.length-1}catch(e){liveMsg(e.message,true)}}
+    try{const f=parse(x.name,b);f.tag=x.new?"new":"";files.push(f);last=files.length-1}catch(e){liveMsg(e.message,true)}}
   if(last>=0)select(last);
-  bmps.forEach(x=>{if(![...$("shots").children].some(a=>a.textContent===x.nome))addShot(x.nome)});
-  if(r.ok)sel.forEach(g=>{g.copiato=g.copiato||(r.cartella.split("/").pop()+"/"+g.nome);g.sel=false;renderItem(g)});
-  const nNew=r.file.filter(x=>x.nuovo).length;
-  const old=r.file.length-nNew, pl=(n,a,b)=>n+" "+(n===1?a:b);
-  liveMsg(r.ok?(nNew?pl(nNew,"file copiato","file copiati"):"Nessun file nuovo da copiare")+(old?"; "+pl(old,"era già sul Mac","erano già sul Mac"):"")
-    +(wavs.length?". "+pl(wavs.length,"forma d'onda aperta","forme d'onda aperte")+" nel visore":"")+(bmps.length?", "+pl(bmps.length,"screenshot elencato","screenshot elencati")+" sotto":"")+".":r.messaggio,!r.ok)});
+  bmps.forEach(x=>{if(![...$("shots").children].some(a=>a.textContent===x.name))addShot(x.name)});
+  if(r.ok)sel.forEach(g=>{g.local=g.local||(r.folder.split("/").pop()+"/"+g.name);g.sel=false;renderItem(g)});
+  const nNew=r.files.filter(x=>x.new).length;
+  const old=r.files.length-nNew, pl=(n,a,b)=>n+" "+(n===1?a:b);
+  liveMsg(r.ok?(nNew?pl(nNew,"file copied","files copied"):"No new files to copy")+(old?"; "+pl(old,"was already on this computer","were already on this computer"):"")
+    +(wavs.length?". "+pl(wavs.length,"waveform","waveforms")+" opened in the viewer":"")+(bmps.length?", "+pl(bmps.length,"screenshot","screenshots")+" listed below":"")+".":r.message,!r.ok)});
 $("delscope").onclick=()=>{
-  const sel=gallery.filter(g=>g.sel), notCopied=sel.filter(g=>!g.copiato);
-  let q="Cancellare "+sel.length+" file dall'oscilloscopio?\n\n"+sel.map(g=>g.nome).join(", ")+"\n\nNon si può annullare.";
-  if(notCopied.length)q+="\n\nATTENZIONE: "+notCopied.length+" di questi non risultano copiati sul Mac: "+notCopied.map(g=>g.nome).join(", ");
+  const sel=gallery.filter(g=>g.sel), notCopied=sel.filter(g=>!g.local);
+  let q="Delete "+sel.length+(sel.length===1?" file":" files")+" from the scope?\n\n"+sel.map(g=>g.name).join(", ")+"\n\nThis cannot be undone.";
+  if(notCopied.length)q+="\n\nWARNING: "+notCopied.length+" of them have not been copied to this computer: "+notCopied.map(g=>g.name).join(", ");
   if(!confirm(q))return;
-  withBusy("Cancellazione in corso…",async()=>{
-    const r=await api("/api/cancella",{file:sel.map(g=>g.f)});
-    const gone=new Set(r.cancellati);
+  withBusy("Deleting…",async()=>{
+    const r=await api("/api/delete",{files:sel.map(g=>g.f)});
+    const gone=new Set(r.deleted);
     gallery=gallery.filter(g=>{if(gone.has(g.f)){g.el.remove();return false}return true});
-    liveMsg(r.messaggio,!r.ok)})};
-$("selnew").onclick=()=>{gallery.forEach(g=>{g.sel=g.copiato===null;renderItem(g)});setButtons()};
+    liveMsg(r.message,!r.ok)})};
+$("selnew").onclick=()=>{gallery.forEach(g=>{g.sel=g.local===null;renderItem(g)});setButtons()};
 $("selall").onclick=()=>{gallery.forEach(g=>{g.sel=true;renderItem(g)});setButtons()};
 $("selnone").onclick=()=>{gallery.forEach(g=>{g.sel=false;renderItem(g)});setButtons()};
 $("reload").onclick=()=>{loadGallery()};
-$("eject").onclick=()=>withBusy("Espulsione…",async()=>{const r=await api("/api/espelli",{});liveMsg(r.messaggio,!r.ok)});
+$("eject").onclick=()=>withBusy("Ejecting…",async()=>{const r=await api("/api/eject",{});liveMsg(r.message,!r.ok)});
 if(SERVED){
   $("live").hidden=false;$("livehint").hidden=true;$("offhelp").hidden=true;$("cmdrow").hidden=true;
   const card=$("scopecard");document.querySelector(".wrap").insertBefore(card,$("list"));
   pollScope();setInterval(pollScope,3000);
 }
 
-/* ---------- avvio ---------- */
+/* ---------- start-up ---------- */
 window.addEventListener("resize",resize);
 if(window.ResizeObserver){const ro=new ResizeObserver(()=>resize());ro.observe(cv);ro.observe(document.querySelector(".side"))}
 resize();

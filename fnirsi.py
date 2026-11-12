@@ -23,12 +23,14 @@ Screenshot (.bmp): plain 320x240 RGB565 BMP, pixels at 0x2710; a 75x36 thumbnail
 0x46 (u16 width, u16 height, RGB565 pixels, little-endian, top row first).
 
 Usage:
-  fnirsi.py scarica [--dest DIR] [--csv] [--espelli]   copy new Waveform/*.wav (+ Screenshots)
-  fnirsi.py visore [--porta N] [--dest DIR] [--csv] [--no-browser]
-                                                        viewer in the browser: choose files by
-                                                        thumbnail, download, delete, eject
-  fnirsi.py info FILE.wav ...                           settings read from the header
-  fnirsi.py csv [--acquisizione N] FILE.wav ...         write FILE.csv (time s; volts)
+  fnirsi.py viewer [--port N] [--dest DIR] [--csv] [--no-browser]
+                                                       viewer in the browser: choose files by
+                                                       thumbnail, download, delete, eject
+  fnirsi.py download [--dest DIR] [--csv] [--eject]    copy new Waveform/*.wav (+ Screenshots)
+  fnirsi.py info FILE.wav ...                          settings read from the header
+  fnirsi.py csv [--acquisition N] FILE.wav ...         write FILE.csv (time s; volts)
+
+Downloads go to measurements/fnirsi_YYYYMMDD in the folder that contains this project.
 """
 import fcntl, glob, os, struct, subprocess, sys, time, zlib
 
@@ -47,7 +49,7 @@ def parse(data, acq=1):
     channels [{name, on, vdiv, zero_div, volts}]."""
     tab = [_u(data, i * 4, 4) for i in range(7)]
     if not (tab[0] == 0x32 and tab[6] == len(data) and tab[4] + tab[5] == tab[6]):
-        raise ValueError("non sembra un file di forma d'onda FNIRSI")
+        raise ValueError("does not look like an FNIRSI waveform file")
     start = tab[4]
     n = tab[5] // 2
     tdiv = _u(data, 0x1D8, 5) / 1e12
@@ -64,7 +66,7 @@ def parse(data, acq=1):
         frame = per
     nacq = per // frame
     if not 1 <= acq <= nacq:
-        raise ValueError(f"acquisizione {acq} inesistente (il file ne ha {nacq})")
+        raise ValueError(f"no acquisition {acq} (the file has {nacq})")
     dt = 1 / rate if rate else tdiv / 1000
     chans = []
     o = 0
@@ -89,7 +91,7 @@ def parse(data, acq=1):
 def write_csv(path, w):
     on = [c for c in w["channels"] if c["on"]]
     with open(path, "w") as fh:
-        fh.write("tempo_s;" + ";".join(c["name"] + "_V" for c in on) + "\n")
+        fh.write("time_s;" + ";".join(c["name"] + "_V" for c in on) + "\n")
         for i in range(w["samples"]):
             vals = ["" if c["volts"][i] is None else f"{c['volts'][i]:.6f}" for c in on]
             fh.write(f"{i * w['dt']:.9g};" + ";".join(vals) + "\n")
@@ -105,9 +107,9 @@ def _fmt(x, unit):
 def info(path):
     w = parse(open(path, "rb").read())
     chs = ", ".join(f"{c['name']} {_fmt(c['vdiv'], 'V')}/div" for c in w["channels"] if c["on"])
-    acq = f", {w['acquisitions']} acquisizioni" if w["acquisitions"] > 1 else ""
+    acq = f", {w['acquisitions']} acquisitions" if w["acquisitions"] > 1 else ""
     return (f"{os.path.basename(path)}: {_fmt(w['tdiv'], 's')}/div, {chs}, "
-            f"{w['samples']} campioni a {_fmt(w['dt'], 's')} ({_fmt(w['samples'] * w['dt'], 's')}){acq}")
+            f"{w['samples']} samples at {_fmt(w['dt'], 's')} ({_fmt(w['samples'] * w['dt'], 's')}){acq}")
 
 
 # ---------- thumbnails ----------
@@ -119,13 +121,13 @@ def thumbnail(head, kind):
         order = "big"
     else:
         if head[:2] != b"BM":
-            raise ValueError("non è un BMP")
+            raise ValueError("not a BMP")
         off = 0x46
         order = "little"
     w = int.from_bytes(head[off:off + 2], order)
     h = int.from_bytes(head[off + 2:off + 4], order)
     if not (0 < w <= 320 and 0 < h <= 240) or len(head) < off + 4 + w * h * 2:
-        raise ValueError("miniatura assente")
+        raise ValueError("no thumbnail")
     px = head[off + 4:off + 4 + w * h * 2]
     rgb = bytearray()
     for i in range(0, len(px), 2):
@@ -195,21 +197,21 @@ def _child(args, timeout):
     except subprocess.TimeoutExpired:
         p.kill()
         p.communicate()
-        raise TimeoutError("lettura bloccata")
+        raise TimeoutError("read hung")
     return p.returncode == 0, out
 
 
 def scope_head(src, n):
-    ok, out = _child(["_testa", src, str(n)], 20)
+    ok, out = _child(["_head", src, str(n)], 20)
     if not ok:
-        raise OSError("lettura non riuscita")
+        raise OSError("read failed")
     return out
 
 
 def scope_delete(src):
-    ok, _ = _child(["_cancella", src], 20)
+    ok, _ = _child(["_delete", src], 20)
     if not ok or os.path.exists(src):
-        raise OSError("cancellazione non riuscita")
+        raise OSError("delete failed")
 
 
 def find_scope():
@@ -236,7 +238,7 @@ def scope_listing(vol):
     return res
 
 
-def scarica(dest, csv=False, eject=False, log=print, copied_paths=None, only=None, present_paths=None):
+def download(dest, csv=False, eject=False, log=print, copied_paths=None, only=None, present_paths=None):
     """Copy new files; return 0 ok, 3 scope not found, 4 read hung.
     Paths of the copied files are appended to copied_paths if given, those already in
     dest (identical) to present_paths; only, if given, is a set of relative paths
@@ -244,7 +246,7 @@ def scarica(dest, csv=False, eject=False, log=print, copied_paths=None, only=Non
     print = log
     vols = find_scope()
     if not vols:
-        print("Oscilloscopio non trovato: collegalo e attendi che compaia come disco (NO NAME).")
+        print("Scope not found: plug it in and wait until it shows up as a disk (NO NAME).")
         return 3
     vol = vols[0]
     os.makedirs(dest, exist_ok=True)
@@ -260,7 +262,7 @@ def scarica(dest, csv=False, eject=False, log=print, copied_paths=None, only=Non
             try:
                 same = os.path.getsize(dst) == size and _same_head(src, dst)
             except TimeoutError:
-                print(f"  {name}: lettura bloccata. Stacca e riattacca l'USB, poi rilancia.")
+                print(f"  {name}: read hung. Unplug and replug the USB cable, then run again.")
                 return 4
             if same:
                 if present_paths is not None:
@@ -272,12 +274,12 @@ def scarica(dest, csv=False, eject=False, log=print, copied_paths=None, only=Non
                 k += 1
             dst = os.path.join(dest, f"{stem}_{k}{ext}")
         try:
-            ok, _ = _child(["_copia", src, dst], 30)
+            ok, _ = _child(["_copy", src, dst], 30)
         except TimeoutError:
-            print(f"  {name}: lettura bloccata. Stacca e riattacca l'USB, poi rilancia.")
+            print(f"  {name}: read hung. Unplug and replug the USB cable, then run again.")
             return 4
         if not ok or not os.path.exists(dst) or os.path.getsize(dst) != size:
-            print(f"  {name}: copia non riuscita")
+            print(f"  {name}: copy failed")
             continue
         copied += 1
         if copied_paths is not None:
@@ -291,7 +293,7 @@ def scarica(dest, csv=False, eject=False, log=print, copied_paths=None, only=Non
             except ValueError as e:
                 line += f"   ({e})"
         print(line)
-    print(f"copiati {copied} file nuovi in {dest}")
+    print(f"copied {copied} new files to {dest}")
     if eject:
         r = subprocess.run(["diskutil", "eject", vol], capture_output=True, text=True)
         print(r.stdout.strip() or r.stderr.strip())
@@ -308,25 +310,28 @@ def _same_head(a, b):
 # ---------- viewer with download, thumbnails and delete ----------
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VIEWER = os.path.join(HERE, "visore_fnirsi_dpox180h.html")
-# downloads go to misure/ next to the project folder (change with --dest)
-MISURE = os.path.join(os.path.dirname(HERE), "misure")
+VIEWER = os.path.join(HERE, "viewer.html")
+# downloads go to measurements/ next to the project folder (change with --dest);
+# an existing misure/ folder from earlier versions is used instead
+DATA = os.path.join(os.path.dirname(HERE), "misure")
+if not os.path.isdir(DATA):
+    DATA = os.path.join(os.path.dirname(HERE), "measurements")
 
 
 def default_dest():
-    return os.path.join(MISURE, "oscilloscopio_" + time.strftime("%Y%m%d"))
+    return os.path.join(DATA, "fnirsi_" + time.strftime("%Y%m%d"))
 
 
-def visore(port=8765, dest=None, csv=False, open_browser=True):
+def viewer(port=8765, dest=None, csv=False, open_browser=True):
     """Serve the viewer on 127.0.0.1 with an API for its buttons.
 
     GET  /                        the viewer
-    GET  /api/stato               is the scope mounted, how many files it holds
-    GET  /api/elenco              files on the scope (path, type, size)
-    GET  /api/miniatura?f=REL     thumbnail as PNG; header X-Copiato names a local copy
-    POST /api/scarica             body {"file": [REL, ...]} or empty for all new files
-    POST /api/cancella            body {"file": [REL, ...]}: delete on the scope
-    POST /api/espelli             eject the scope's disk
+    GET  /api/status              is the scope mounted, how many files it holds
+    GET  /api/list                files on the scope (path, type, size)
+    GET  /api/thumbnail?f=REL     thumbnail as PNG; header X-Local-Copy names a local copy
+    POST /api/download            body {"files": [REL, ...]} or empty for all new files
+    POST /api/delete              body {"files": [REL, ...]}: delete on the scope
+    POST /api/eject               eject the scope's disk
     GET  /api/file/NAME           a file copied into the destination folder
     POSTs must carry the header X-Fnirsi: 1, which a foreign web page cannot send
     without a CORS preflight (never answered), and the Host must be local.
@@ -341,9 +346,9 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
         return state["dest"] or default_dest()
 
     def local_copy(kind, size, head):
-        """A file already on the Mac with the same size and the same head, or None."""
+        """A file already on this computer with the same size and the same head, or None."""
         n = len(head)
-        for p in glob.glob(os.path.join(MISURE, "**", "*." + kind), recursive=True) + \
+        for p in glob.glob(os.path.join(DATA, "**", "*." + kind), recursive=True) + \
                 glob.glob(os.path.join(cur_dest(), "*." + kind)):
             try:
                 st = os.stat(p)
@@ -357,7 +362,7 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
                     c = (st.st_size, st.st_mtime, fh.read(n))
                 local_heads[p] = c
             if c[2][:n] == head:
-                return os.path.relpath(p, MISURE)
+                return os.path.relpath(p, DATA)
         return None
 
     def resolve(vol, rel):
@@ -366,7 +371,7 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
         exts = dict(SUBDIRS)
         if sub not in exts or not name or "/" in name or name.startswith(".") \
                 or not name.lower().endswith(exts[sub]):
-            raise ValueError("percorso non valido")
+            raise ValueError("invalid path")
         return os.path.join(vol, sub, name)
 
     class H(http.server.BaseHTTPRequestHandler):
@@ -402,54 +407,54 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
 
         def do_GET(self):
             if not self._local():
-                return self._send(403, {"errore": "host non locale"})
+                return self._send(403, {"error": "host not local"})
             u = urllib.parse.urlparse(self.path)
             path, q = u.path, urllib.parse.parse_qs(u.query)
             if path in ("/", "/index.html"):
                 with open(VIEWER, "rb") as fh:
                     return self._send(200, fh.read(), "text/html; charset=utf-8")
-            if path == "/api/stato":
+            if path == "/api/status":
                 vols = find_scope()
                 try:
                     n = len(scope_listing(vols[0])) if vols else 0
                 except OSError:
                     n = None
-                return self._send(200, {"collegato": bool(vols), "volume": vols[0] if vols else None,
-                                        "file_sullo_strumento": n, "cartella": cur_dest(),
-                                        "occupato": scope_lock.locked()})
-            if path == "/api/elenco":
+                return self._send(200, {"connected": bool(vols), "volume": vols[0] if vols else None,
+                                        "files_on_scope": n, "folder": cur_dest(),
+                                        "busy": scope_lock.locked()})
+            if path == "/api/list":
                 vols = find_scope()
                 if not vols:
-                    return self._send(200, {"collegato": False, "file": []})
-                files = [{"f": rel, "nome": rel.split("/", 1)[1], "tipo": rel.rsplit(".", 1)[1].lower(),
-                          "dimensione": size} for rel, _, size in scope_listing(vols[0])]
-                return self._send(200, {"collegato": True, "file": files})
-            if path == "/api/miniatura":
+                    return self._send(200, {"connected": False, "files": []})
+                files = [{"f": rel, "name": rel.split("/", 1)[1], "type": rel.rsplit(".", 1)[1].lower(),
+                          "size": size} for rel, _, size in scope_listing(vols[0])]
+                return self._send(200, {"connected": True, "files": files})
+            if path == "/api/thumbnail":
                 vols = find_scope()
                 if not vols:
-                    return self._send(404, {"errore": "oscilloscopio non collegato"})
+                    return self._send(404, {"error": "scope not connected"})
                 try:
                     full = resolve(vols[0], (q.get("f") or [""])[0])
                     st = os.stat(full)
                 except (ValueError, OSError):
-                    return self._send(404, {"errore": "file non trovato"})
+                    return self._send(404, {"error": "file not found"})
                 kind = full.rsplit(".", 1)[1].lower()
                 key = (full, st.st_size, st.st_mtime)
                 head = heads.get(key)
                 if head is None:
                     if not scope_lock.acquire(timeout=120):
-                        return self._send(409, {"errore": "oscilloscopio occupato"})
+                        return self._send(409, {"error": "scope busy"})
                     try:
                         head = scope_head(full, min(st.st_size, thumb_bytes_needed(kind)))
                     except TimeoutError:
-                        return self._send(504, {"errore": "lettura bloccata: stacca e riattacca l'USB"})
+                        return self._send(504, {"error": "read hung: unplug and replug the USB cable"})
                     except OSError as e:
-                        return self._send(500, {"errore": str(e)})
+                        return self._send(500, {"error": str(e)})
                     finally:
                         scope_lock.release()
                     heads[key] = head
-                copia = local_copy(kind, st.st_size, head) or ""
-                extra = {"X-Copiato": urllib.parse.quote(copia)}
+                copy = local_copy(kind, st.st_size, head) or ""
+                extra = {"X-Local-Copy": urllib.parse.quote(copy)}
                 try:
                     return self._send(200, png(*thumbnail(head, kind)), "image/png", extra)
                 except ValueError:
@@ -458,50 +463,50 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
                 name = os.path.basename(urllib.parse.unquote(path[len("/api/file/"):]))
                 full = os.path.join(cur_dest(), name)
                 if not name.lower().endswith((".wav", ".bmp", ".csv")) or not os.path.isfile(full):
-                    return self._send(404, {"errore": "file non trovato"})
+                    return self._send(404, {"error": "file not found"})
                 ctype = {"wav": "application/octet-stream", "bmp": "image/bmp",
                          "csv": "text/csv; charset=utf-8"}[name.rsplit(".", 1)[1].lower()]
                 with open(full, "rb") as fh:
                     return self._send(200, fh.read(), ctype)
-            self._send(404, {"errore": "non trovato"})
+            self._send(404, {"error": "not found"})
 
         def do_POST(self):
             if not self._local() or self.headers.get("X-Fnirsi") != "1":
-                return self._send(403, {"errore": "richiesta non ammessa"})
+                return self._send(403, {"error": "request not allowed"})
             path = urllib.parse.urlparse(self.path).path
             body = self._body()
             if not scope_lock.acquire(timeout=60):   # waits for a thumbnail being read
-                return self._send(409, {"errore": "un'altra operazione è in corso"})
+                return self._send(409, {"error": "another operation is in progress"})
             try:
-                if path == "/api/scarica":
+                if path == "/api/download":
                     lines, paths, present = [], [], []
                     dest = cur_dest()
-                    only = set(body["file"]) if isinstance(body.get("file"), list) else None
-                    rc = scarica(dest, csv=csv, log=lines.append, copied_paths=paths, only=only,
+                    only = set(body["files"]) if isinstance(body.get("files"), list) else None
+                    rc = download(dest, csv=csv, log=lines.append, copied_paths=paths, only=only,
                                  present_paths=present)
                     for l in lines:
                         print(l)
-                    files = [{"nome": os.path.basename(p), "tipo": p.rsplit(".", 1)[1].lower(), "nuovo": True}
+                    files = [{"name": os.path.basename(p), "type": p.rsplit(".", 1)[1].lower(), "new": True}
                              for p in paths] + \
-                            [{"nome": os.path.basename(p), "tipo": p.rsplit(".", 1)[1].lower(), "nuovo": False}
+                            [{"name": os.path.basename(p), "type": p.rsplit(".", 1)[1].lower(), "new": False}
                              for p in present]
-                    msg = {0: f"Copiati {len(paths)} file nuovi in {dest}"
-                              + (f"; {len(present)} erano già lì" if present else ""),
-                           3: "Oscilloscopio non trovato: collegalo e attiva USB sharing.",
-                           4: "Lettura bloccata: stacca e riattacca l'USB, poi riprova."}[rc]
-                    return self._send(200, {"ok": rc == 0, "codice": rc, "messaggio": msg,
-                                            "file": files, "dettagli": lines, "cartella": dest})
-                if path == "/api/cancella":
+                    msg = {0: f"Copied {len(paths)} new files to {dest}"
+                              + (f"; {len(present)} were already there" if present else ""),
+                           3: "Scope not found: plug it in and turn on USB sharing.",
+                           4: "Read hung: unplug and replug the USB cable, then try again."}[rc]
+                    return self._send(200, {"ok": rc == 0, "code": rc, "message": msg,
+                                            "files": files, "details": lines, "folder": dest})
+                if path == "/api/delete":
                     vols = find_scope()
                     if not vols:
-                        return self._send(200, {"ok": False, "messaggio": "Oscilloscopio non collegato."})
-                    rels = body.get("file") if isinstance(body.get("file"), list) else []
+                        return self._send(200, {"ok": False, "message": "Scope not connected."})
+                    rels = body.get("files") if isinstance(body.get("files"), list) else []
                     done, errors = [], []
                     for rel in rels:
                         try:
                             full = resolve(vols[0], rel)
                             if not os.path.isfile(full):
-                                raise OSError("non c'è più")
+                                raise OSError("no longer there")
                             scope_delete(full)
                             side = os.path.join(os.path.dirname(full), "._" + os.path.basename(full))
                             if os.path.exists(side):
@@ -510,25 +515,25 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
                                 except OSError:
                                     pass
                             done.append(rel)
-                            print(f"  cancellato sullo strumento: {rel}")
+                            print(f"  deleted on the scope: {rel}")
                         except TimeoutError:
-                            errors.append(f"{rel}: bloccato, stacca e riattacca l'USB")
+                            errors.append(f"{rel}: hung, unplug and replug the USB cable")
                             break
                         except (ValueError, OSError) as e:
                             errors.append(f"{rel}: {e}")
-                    msg = f"Cancellati {len(done)} file dallo strumento."
+                    msg = f"Deleted {len(done)} {'file' if len(done) == 1 else 'files'} from the scope."
                     if errors:
-                        msg += " Problemi: " + "; ".join(errors)
-                    return self._send(200, {"ok": not errors, "messaggio": msg, "cancellati": done})
-                if path == "/api/espelli":
+                        msg += " Problems: " + "; ".join(errors)
+                    return self._send(200, {"ok": not errors, "message": msg, "deleted": done})
+                if path == "/api/eject":
                     vols = find_scope()
                     if not vols:
-                        return self._send(200, {"ok": False, "messaggio": "Nessun oscilloscopio da espellere."})
+                        return self._send(200, {"ok": False, "message": "No scope to eject."})
                     r = subprocess.run(["diskutil", "eject", vols[0]], capture_output=True, text=True)
                     ok = r.returncode == 0
-                    return self._send(200, {"ok": ok, "messaggio": "Disco espulso: puoi staccare il cavo." if ok
-                                            else (r.stderr.strip() or r.stdout.strip() or "Espulsione non riuscita.")})
-                self._send(404, {"errore": "non trovato"})
+                    return self._send(200, {"ok": ok, "message": "Disk ejected: you can unplug the cable." if ok
+                                            else (r.stderr.strip() or r.stdout.strip() or "Eject failed.")})
+                self._send(404, {"error": "not found"})
             finally:
                 scope_lock.release()
 
@@ -541,7 +546,7 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
             return 5
         srv = http.server.ThreadingHTTPServer(("127.0.0.1", port), H)
     url = f"http://127.0.0.1:{port}/"
-    print(f"Visore su {url}  (file copiati in {cur_dest()}; Ctrl-C per chiudere)")
+    print(f"Viewer at {url}  (files are copied to {cur_dest()}; Ctrl-C to quit)")
     if open_browser:
         threading.Timer(0.5, webbrowser.open, args=(url,)).start()
     try:
@@ -554,61 +559,68 @@ def visore(port=8765, dest=None, csv=False, open_browser=True):
 
 
 def _replace_old_viewer(port):
-    """The port is taken. If it is another 'fnirsi.py visore' with nothing in progress,
+    """The port is taken. If it is another 'fnirsi.py viewer' with nothing in progress,
     stop it and return True; otherwise explain and return False."""
     import json, signal, urllib.request
     pids = subprocess.run(["lsof", "-t", "-nP", f"-iTCP:{port}", "-sTCP:LISTEN"],
                           capture_output=True, text=True).stdout.split()
     cmd = subprocess.run(["ps", "-o", "command=", "-p", pids[0]], capture_output=True,
                          text=True).stdout.strip() if pids else ""
-    if not ("fnirsi.py" in cmd and "visore" in cmd):
-        print(f"La porta {port} è usata da un altro programma ({cmd or 'sconosciuto'}).\n"
-              f"Scegline un'altra, per esempio: fnirsi.py visore --porta {port + 1}")
+    if not ("fnirsi.py" in cmd and ("viewer" in cmd or "visore" in cmd)):
+        print(f"Port {port} is used by another program ({cmd or 'unknown'}).\n"
+              f"Pick another one, for example: fnirsi.py viewer --port {port + 1}")
         return False
     try:
-        with urllib.request.urlopen(f"http://127.0.0.1:{port}/api/stato", timeout=5) as r:
-            busy = json.load(r).get("occupato")
+        with urllib.request.urlopen(f"http://127.0.0.1:{port}/api/status", timeout=5) as r:
+            st = json.load(r)
+            busy = st.get("busy", st.get("occupato"))
     except (OSError, ValueError):
         busy = False
     if busy:
-        print(f"C'è già un visore aperto (processo {pids[0]}) che sta copiando o cancellando file.\n"
-              f"Aspetta che finisca, chiudilo con Ctrl-C nel suo terminale e rilancia.")
+        print(f"Another viewer (process {pids[0]}) is copying or deleting files.\n"
+              f"Wait until it finishes, quit it with Ctrl-C in its terminal and run again.")
         return False
-    print(f"Chiudo il visore già aperto (processo {pids[0]}) e lo sostituisco con questo.")
+    print(f"Closing the viewer already running (process {pids[0]}) and replacing it with this one.")
     os.kill(int(pids[0]), signal.SIGTERM)
     for _ in range(50):
         time.sleep(0.1)
         if not subprocess.run(["lsof", "-t", "-nP", f"-iTCP:{port}", "-sTCP:LISTEN"],
                               capture_output=True, text=True).stdout.strip():
             return True
-    print("Il visore precedente non si è chiuso: chiudilo con Ctrl-C nel suo terminale e rilancia.")
+    print("The previous viewer did not close: quit it with Ctrl-C in its terminal and run again.")
     return False
 
 
+# Italian names from earlier versions, still accepted
+ALIASES = {"scarica": "download", "visore": "viewer", "--porta": "--port",
+           "--espelli": "--eject", "--acquisizione": "--acquisition"}
+
+
 def main(argv):
-    if len(argv) >= 3 and argv[0] == "_copia":
+    if len(argv) >= 3 and argv[0] == "_copy":
         copy_small(argv[1], argv[2])
         return 0
-    if len(argv) >= 3 and argv[0] == "_testa":
+    if len(argv) >= 3 and argv[0] == "_head":
         sys.stdout.buffer.write(read_head_small(argv[1], int(argv[2])))
         return 0
-    if len(argv) >= 2 and argv[0] == "_cancella":
+    if len(argv) >= 2 and argv[0] == "_delete":
         os.remove(argv[1])
         return 0
     if not argv or argv[0] in ("-h", "--help"):
         print(__doc__)
         return 0
+    argv = [ALIASES.get(a, a) for a in argv]
     cmd, rest = argv[0], argv[1:]
-    if cmd == "scarica":
+    if cmd == "download":
         dest = rest[rest.index("--dest") + 1] if "--dest" in rest else default_dest()
-        return scarica(dest, "--csv" in rest, "--espelli" in rest)
-    if cmd == "visore":
-        port = int(rest[rest.index("--porta") + 1]) if "--porta" in rest else 8765
+        return download(dest, "--csv" in rest, "--eject" in rest)
+    if cmd == "viewer":
+        port = int(rest[rest.index("--port") + 1]) if "--port" in rest else 8765
         dest = rest[rest.index("--dest") + 1] if "--dest" in rest else None
-        return visore(port, dest, "--csv" in rest, "--no-browser" not in rest)
+        return viewer(port, dest, "--csv" in rest, "--no-browser" not in rest)
     acq = 1
-    if "--acquisizione" in rest:
-        i = rest.index("--acquisizione")
+    if "--acquisition" in rest:
+        i = rest.index("--acquisition")
         acq = int(rest[i + 1])
         rest = rest[:i] + rest[i + 2:]
     files = [f for a in rest for f in (glob.glob(a) or [a])]
@@ -621,7 +633,7 @@ def main(argv):
                 write_csv(out, parse(open(f, "rb").read(), acq))
                 print(f"{f} -> {out}")
             else:
-                print("comando sconosciuto:", cmd)
+                print("unknown command:", cmd, "(see fnirsi.py --help)")
                 return 2
         except (OSError, ValueError) as e:
             print(f"{f}: {e}")

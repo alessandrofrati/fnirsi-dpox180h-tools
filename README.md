@@ -1,54 +1,54 @@
-# FNIRSI DPOX180H: scaricamento, visore e decodifica dei file
+# FNIRSI DPOX180H: download, viewer and decoding of saved files
 
-Strumenti per l'oscilloscopio portatile FNIRSI DPOX180H (firmware V40), testati su macOS:
+Tools for the FNIRSI DPOX180H handheld oscilloscope (firmware V40), tested on macOS:
 
-- **Scaricamento:** copia i file dallo strumento via USB senza i blocchi che si hanno con il Finder.
-- **Lettura dei file:** decodifica correttamente le forme d'onda salvate (`.wav`) e le esporta in CSV.
-- **Visore nel browser:** galleria con miniature, scale come sullo strumento, cursori, zoom e decodifica dei bus **I²C**, **UART** e **1-Wire**.
+- **Download:** copies the files off the scope over USB without the hangs you get with the Finder.
+- **File decoding:** decodes the saved waveforms (`.wav`) correctly and exports them to CSV.
+- **Browser viewer:** thumbnail gallery, scope-like scales, cursors, zoom, and **I²C**, **UART** and **1-Wire** bus decoding.
 
-> **English summary.** Tools for the FNIRSI DPOX180H handheld scope (firmware V40). They copy the saved files over USB without the macOS hangs and decode the `.wav` waveform files correctly. The file format is documented in `FORMATO_FILE.md`: everything is big-endian, and each channel holds several acquisitions of the same window. A browser viewer has a thumbnail gallery, scope-like scales, cursors and I²C / UART / 1-Wire decoding. The UI and docs are in Italian.
+*Versione italiana: [README.it.md](README.it.md).*
 
-**Non affiliato con FNIRSI.** Progetto indipendente, nato per leggere i propri file di misura. FNIRSI è un marchio del rispettivo proprietario.
+**Not affiliated with FNIRSI.** An independent project, written to read my own measurement files. FNIRSI is a trademark of its owner.
 
-## Requisiti
+## Requirements
 
-- Python 3.9 o successivo, senza librerie esterne.
-- macOS per lo scaricamento dallo strumento: usa `mount`, `diskutil` e le opzioni di lettura senza cache. La lettura dei file e il visore funzionano ovunque.
-- Un browser recente.
+- Python 3.9 or later, no external libraries.
+- macOS to download from the scope: the script uses `mount`, `diskutil` and uncached reads. Reading files and the viewer work anywhere.
+- A recent browser.
 
-## Uso
+## Usage
 
-Sullo strumento: impostazioni → **USB sharing**, poi collega il cavo.
+On the scope: settings → **USB sharing**, then plug in the cable.
 
 ```bash
-python3 fnirsi.py visore
+python3 fnirsi.py viewer
 ```
 
-Si apre il visore nel browser, con la galleria dei file presenti sullo strumento.
+The viewer opens in the browser, with a gallery of the files on the scope.
 
-- **Galleria:**
-  - Miniature con l'etichetta **nuovo** o **sul Mac**.
-  - **Scarica selezionati** apre subito le forme d'onda nel visore.
-  - **Cancella dallo strumento** chiede conferma prima di cancellare.
-  - **Espelli** espelle il disco dello strumento.
-- **Visore:**
-  - V/div e s/div come sullo strumento (passi 1-2-5, unità automatiche), posizione dello zero, griglia 12 × 8.
-  - Tracce separate o sovrapposte.
-  - Scelta dell'acquisizione: ogni file ne contiene più di una, e la prima è quella che si vedeva sullo schermo.
-  - Zoom trascinando sul grafico, scorrimento con la barra, ◀ ▶ o il trackpad.
-  - Cursori Δt e ΔV.
-  - Esportazione CSV e PNG.
-- **Decodifica bus:**
-  - **I²C:** START, STOP, start ripetuto, indirizzo a 7 bit, R/W, ACK e NACK.
-  - **UART:** TX e RX, velocità automatica, bit di dati, parità, bit di stop, livelli TTL o RS-232.
-  - **1-Wire:** reset, presenza, comandi ROM e DS18B20, CRC, temperatura.
+- **Gallery:**
+  - Thumbnails labelled **new** or **on this computer**.
+  - **Download selected** copies the files and opens the waveforms in the viewer straight away.
+  - **Delete from scope** asks for confirmation first.
+  - **Eject** ejects the scope's disk.
+- **Viewer:**
+  - V/div and s/div as on the scope (1-2-5 steps, automatic units), zero position, 12 × 8 grid.
+  - Separate or overlaid traces.
+  - Acquisition choice: each file holds more than one, and the first is the one the screen showed.
+  - Zoom by dragging on the plot; scroll with the bar, ◀ ▶ or the trackpad.
+  - Δt and ΔV cursors.
+  - CSV and PNG export.
+- **Bus decoding:**
+  - **I²C:** START, STOP, repeated start, 7-bit address, R/W, ACK and NACK.
+  - **UART:** TX and RX, automatic baud rate, data bits, parity, stop bits, TTL or RS-232 levels.
+  - **1-Wire:** reset, presence, ROM and DS18B20 commands, CRC, temperature.
 
-Il visore funziona anche aprendo direttamente `visore_fnirsi_dpox180h.html` nel browser. In quel caso legge i file aperti a mano o trascinati, senza la galleria dello strumento.
+The viewer also works when you open `viewer.html` directly in the browser. It then reads files you open or drop on it, without the scope gallery.
 
-Altri comandi:
+Other commands:
 
 ```bash
-python3 fnirsi.py scarica --csv --espelli
+python3 fnirsi.py download --csv --eject
 ```
 
 ```bash
@@ -56,27 +56,29 @@ python3 fnirsi.py info FILE.wav
 ```
 
 ```bash
-python3 fnirsi.py csv --acquisizione 2 FILE.wav
+python3 fnirsi.py csv --acquisition 2 FILE.wav
 ```
 
-I file scaricati vanno in `misure/oscilloscopio_AAAAMMGG`, nella cartella che contiene questo progetto. Si può cambiare con `--dest DIR`.
+Downloaded files go to `measurements/fnirsi_YYYYMMDD`, in the folder that contains this project. Use `--dest DIR` to change it.
 
-## Contenuto
+To try the decoders without a scope, open the files in `examples/` in the viewer.
 
-| Percorso | Che cos'è |
+## Contents
+
+| Path | What it is |
 |---|---|
-| `fnirsi.py` | scaricamento, decodifica, CSV e server del visore |
-| `visore_fnirsi_dpox180h.html` | il visore |
-| `FORMATO_FILE.md` | formato dei file `.wav` e `.bmp`, comportamento via USB |
-| `esempi/` | file `.wav` sintetici con traffico I²C, UART e 1-Wire per provare la decodifica |
-| `esempi/generatori/` | gli script che li hanno generati |
+| `fnirsi.py` | download, decoding, CSV and the viewer's server |
+| `viewer.html` | the viewer |
+| `FILE_FORMAT.md` | format of the `.wav` and `.bmp` files, behaviour over USB |
+| `examples/` | synthetic `.wav` files with I²C, UART and 1-Wire traffic to try the decoders |
+| `examples/generators/` | the scripts that made them |
 
-## Da sapere
+## Good to know
 
-- **Blocchi su macOS:** lo strumento si blocca con le letture grandi. Lo script legge 4 kB alla volta senza cache, sempre in un processo separato con un timeout. Se una lettura si blocca, stacca e riattacca il cavo.
-- **USB:** lo strumento offre solo il disco USB (mass storage): non c'è SCPI né seriale né acquisizione remota.
-- **Decodifica dei bus:** è stata provata sui file sintetici di `esempi/`. Come su qualsiasi oscilloscopio, il protocollo va scelto in base al segnale: un decodificatore legge qualcosa anche da un segnale che non è un bus.
+- **Hangs on macOS:** the scope hangs on large reads. The script reads 4 kB at a time without cache, always in a separate process with a timeout. If a read hangs, unplug and replug the cable.
+- **USB:** the scope only offers a USB disk (mass storage): no SCPI, no serial port, no remote acquisition.
+- **Bus decoding:** tested on the synthetic files in `examples/`. As on any scope, pick the protocol to match the signal: a decoder will read something even from a signal that is not a bus.
 
-## Licenza
+## License
 
-MIT, vedi `LICENSE`.
+MIT, see `LICENSE`.
