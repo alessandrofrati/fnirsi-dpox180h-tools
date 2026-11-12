@@ -8,6 +8,8 @@ Strumenti per l'oscilloscopio portatile FNIRSI DPOX180H (firmware V40), testati 
 - **Lettura dei file:** decodifica correttamente le forme d'onda salvate (`.wav`) e le esporta in CSV.
 - **Visore nel browser:** galleria con miniature, scale come sullo strumento, cursori, zoom e decodifica dei bus **I²C**, **UART** e **1-Wire**.
 
+![Il visore con decodifica I²C e cursori di tempo e tensione su due canali](docs/screenshot.png)
+
 **Non affiliato con FNIRSI.** Progetto indipendente, nato per leggere i propri file di misura. FNIRSI è un marchio del rispettivo proprietario.
 
 ## Requisiti

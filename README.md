@@ -6,6 +6,8 @@ Tools for the FNIRSI DPOX180H handheld oscilloscope (firmware V40), tested on ma
 - **File decoding:** decodes the saved waveforms (`.wav`) correctly and exports them to CSV.
 - **Browser viewer:** thumbnail gallery, scope-like scales, cursors, zoom, and **I²C**, **UART** and **1-Wire** bus decoding.
 
+![The viewer with I²C decoding, time and voltage cursors on two channels](docs/screenshot.png)
+
 *Versione italiana: [README.it.md](README.it.md).*
 
 **Not affiliated with FNIRSI.** An independent project, written to read my own measurement files. FNIRSI is a trademark of its owner.
