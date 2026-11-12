@@ -1,0 +1,12 @@
+# never publish firmware files or anything extracted from them
+*.iso
+*.bin
+fw/
+*.pkl
+analisi_firmware/
+# local files
+__pycache__/
+.DS_Store
+fnirsi_copia.py
+misure/
+*.csv

@@ -1,0 +1,1004 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Visore FNIRSI DPOX180H</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: banco di misura — barra file in alto, schermo dello strumento al centro, pannello canali a fianco (sotto su telefono). */
+:root{
+  --bg:#eef1f0; --panel:#ffffff; --fg:#17201e; --muted:#5d6b67; --line:#d3dbd8;
+  --screen:#0f1714; --grid:#24342f; --grid-major:#36504a; --screen-fg:#b9c9c3;
+  --ch1:#e0a100; --ch2:#11a3c9; --accent:#0e7c66; --accent-fg:#ffffff; --warn:#b4541a;
+  --f-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1210; --panel:#141c19; --fg:#e3ebe8; --muted:#93a39e; --line:#26332f;
+  --screen:#070b0a; --grid:#1b2925; --grid-major:#2c423c; --screen-fg:#a9bab4;
+  --ch1:#f2b51c; --ch2:#35c0e6; --accent:#2fb594; --accent-fg:#06110d; --warn:#e3884f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1210; --panel:#141c19; --fg:#e3ebe8; --muted:#93a39e; --line:#26332f;
+  --screen:#070b0a; --grid:#1b2925; --grid-major:#2c423c; --screen-fg:#a9bab4;
+  --ch1:#f2b51c; --ch2:#35c0e6; --accent:#2fb594; --accent-fg:#06110d; --warn:#e3884f; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45}
+.wrap{max-width:1280px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
+h1{font-family:var(--f-display);font-weight:600;font-size:1.7rem;letter-spacing:.01em;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:2px 0 0;max-width:62ch}
+.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;padding:7px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn:focus-visible,input:focus-visible,label.drop:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.btn[disabled]{opacity:.5;cursor:default}
+.files{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+label.drop{display:flex;align-items:center;gap:10px;border:1.5px dashed var(--line);border-radius:8px;padding:10px 14px;cursor:pointer;background:var(--panel)}
+label.drop.over{border-color:var(--accent)}
+label.drop input{position:absolute;opacity:0;width:1px;height:1px}
+.chip{font-family:var(--f-mono);font-size:.85rem;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 11px;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.chip .tag{color:var(--muted);margin-left:6px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
+.scope{background:var(--screen);border-radius:10px;padding:10px;display:grid;gap:8px;min-width:0}
+.scopebar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--screen-fg);font-family:var(--f-mono);font-size:.8rem}
+.scopebar b{font-weight:500}
+canvas{display:block;width:100%;height:auto;touch-action:pan-y;cursor:crosshair}
+.readout{display:flex;flex-wrap:wrap;gap:4px 18px;font-family:var(--f-mono);font-size:.82rem;color:var(--screen-fg);min-height:1.3em;font-variant-numeric:tabular-nums}
+.c1{color:var(--ch1)} .c2{color:var(--ch2)}
+.side{display:grid;gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px}
+.card h2{font-family:var(--f-display);font-weight:600;font-size:1.05rem;margin:0;display:flex;align-items:center;gap:8px}
+.swatch{width:12px;height:12px;border-radius:3px;display:inline-block}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field{display:grid;gap:3px;font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.field input,.field select{font:500 .95rem var(--f-mono);text-transform:none;letter-spacing:0;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%;box-sizing:border-box;font-variant-numeric:tabular-nums}
+.check{display:flex;align-items:center;gap:6px;font-size:.9rem}
+.stats{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-family:var(--f-mono);font-size:.82rem;font-variant-numeric:tabular-nums}
+.stats dt{color:var(--muted)} .stats dd{margin:0;text-align:right}
+.src{font-size:.78rem;color:var(--muted)}
+.src.warn{color:var(--warn)}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.note{font-size:.85rem;color:var(--muted);max-width:75ch}
+.msg{font-size:.88rem;min-height:1.2em}
+.knob{display:flex;gap:4px;align-items:stretch}
+.panbar{display:flex;gap:8px;align-items:center}
+.declist{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-height:260px;overflow:auto}
+.declist button{all:unset;box-sizing:border-box;width:100%;cursor:pointer;font:500 .8rem var(--f-mono);padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);overflow-wrap:anywhere}
+.declist button:hover,.declist button:focus-visible{border-color:var(--accent)}
+.declist .t{color:var(--muted);margin-right:6px}
+.declist .nack{color:var(--warn)}
+.panbar input{flex:1;min-width:0;accent-color:var(--accent)}
+.panbar .btn{background:transparent;color:var(--screen-fg);border-color:var(--grid-major);padding:2px 10px}
+.unit{text-transform:none;letter-spacing:.02em}
+.knob .btn{padding:2px 9px;font-size:1rem;line-height:1}
+.knob input{min-width:0;flex:1;-moz-appearance:textfield;appearance:textfield}
+.knob input::-webkit-inner-spin-button,.knob input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.btn[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.btn.danger{color:var(--warn)} .btn.danger:hover{border-color:var(--warn)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.thumb{display:grid;gap:4px;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg);cursor:pointer;font-size:.8rem;min-width:0}
+.thumb[aria-checked="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.thumb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.thumb .img{aspect-ratio:102/54;background:var(--screen);border-radius:4px;display:grid;place-items:center;overflow:hidden;color:var(--screen-fg);font-size:.75rem}
+.thumb.bmp .img{aspect-ratio:75/36}
+.thumb img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
+.thumb .nm{display:flex;align-items:center;gap:6px;font-family:var(--f-mono);font-weight:500}
+.thumb .nm input{margin:0;pointer-events:none}
+.thumb .meta{color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px}
+.badge{border-radius:999px;padding:0 7px;font-size:.72rem;border:1px solid var(--line);color:var(--muted)}
+.badge.new{border-color:var(--accent);color:var(--accent)}
+.msg.err{color:var(--warn)}
+details{font-size:.88rem;color:var(--muted)} details summary{cursor:pointer;color:var(--fg);font-weight:500}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Visore FNIRSI DPOX180H</h1>
+      <p class="sub">Apre i file di forma d'onda salvati dall'oscilloscopio (cartella <code>Waveform</code>, estensione <code>.wav</code>), li converte in volt e secondi e li esporta in CSV. Tutto resta nel browser.</p>
+    </div>
+    <div class="files">
+      <label class="drop" id="drop" for="file">
+        <input type="file" id="file" accept=".wav" multiple>
+        <span><b>Apri file .wav</b> o trascinali qui</span>
+      </label>
+      <label class="btn" for="dir">Apri cartella<input type="file" id="dir" webkitdirectory multiple hidden></label>
+    </div>
+  </header>
+
+  <div class="files" id="list" aria-label="File caricati"></div>
+
+  <div class="main">
+    <section class="scope" aria-label="Schermo">
+      <div class="scopebar"><span id="fname"></span><span id="tb"></span></div>
+      <canvas id="cv" width="1200" height="640" role="img" aria-label="Tracce dei due canali"></canvas>
+      <div class="panbar" id="panbar" hidden>
+        <button class="btn" type="button" id="panl" aria-label="Indietro di una divisione">◀</button>
+        <input type="range" id="pan" min="0" max="0" step="1" value="0" aria-label="Posizione della vista nell'acquisizione">
+        <button class="btn" type="button" id="panr" aria-label="Avanti di una divisione">▶</button>
+      </div>
+      <div class="readout" id="readout">Passa sopra le tracce per leggere i valori · trascina per ingrandire un tratto · doppio clic per tornare a tutto</div>
+    </section>
+
+    <aside class="side">
+      <div class="card" id="card1" hidden></div>
+      <div class="card" id="card2" hidden></div>
+      <div class="card">
+        <h2>Tempo e vista</h2>
+        <div class="row">
+          <div class="field"><span id="tdivu" class="unit">s/div</span><span class="knob"><button class="btn" type="button" id="tdn" aria-label="Meno s/div">−</button><input id="tdiv" type="number" step="any" min="0" aria-label="Secondi per divisione"><button class="btn" type="button" id="tup" aria-label="Più s/div">+</button></span></div>
+          <label class="field">Campionamento<input id="npts" type="text" readonly></label>
+        </div>
+        <div class="row">
+          <label class="field"><span>Da (<span class="unit" id="t0u">s</span>)</span><input id="t0" type="number" step="any" min="0"></label>
+          <label class="field"><span>A (<span class="unit" id="t1u">s</span>)</span><input id="t1" type="number" step="any" min="0"></label>
+        </div>
+        <div class="row" id="acqrow" hidden>
+          <label class="field">Acquisizione<select id="acq"></select></label>
+          <div class="src" id="acqnote"></div>
+        </div>
+        <div class="src" id="tsrc"></div>
+        <div class="tools">
+          <button class="btn" id="reset" type="button">Tutto</button>
+          <button class="btn" id="mode" type="button" aria-pressed="false">Sovrapponi le tracce</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Cursori</h2>
+        <div class="tools">
+          <button class="btn" id="curt" type="button" aria-pressed="false">Tempo (Δt)</button>
+          <button class="btn" id="curv" type="button" aria-pressed="false">Tensione (ΔV)</button>
+          <button class="btn" id="curhere" type="button" hidden>Riporta nella vista</button>
+        </div>
+        <label class="field" id="curvchw" hidden>Canale dei cursori di tensione<select id="curvch"></select></label>
+        <dl class="stats" id="curstats"></dl>
+        <div class="src" id="curhelp">Attiva i cursori e trascina le linee sul grafico per spostarli.</div>
+      </div>
+      <div class="card">
+        <h2>Decodifica bus</h2>
+        <label class="field">Protocollo<select id="proto">
+          <option value="">Nessuna</option><option value="i2c">I²C (SCL e SDA)</option><option value="uart">UART (seriale)</option><option value="ow">1-Wire</option>
+        </select></label>
+        <div id="decopts" hidden>
+          <div class="row" id="o-i2c">
+            <label class="field">SCL<select id="decscl"></select></label>
+            <label class="field">SDA<select id="decsda"></select></label>
+          </div>
+          <div id="o-uart">
+            <div class="row">
+              <label class="field">Canali<select id="uch"></select></label>
+              <label class="field">Velocità (baud)<select id="ubaud"><option value="auto">Automatica</option><option value="300">300</option><option value="600">600</option><option value="1200">1200</option><option value="2400">2400</option><option value="4800">4800</option><option value="9600">9600</option><option value="14400">14400</option><option value="19200">19200</option><option value="28800">28800</option><option value="31250">31250</option><option value="38400">38400</option><option value="57600">57600</option><option value="76800">76800</option><option value="115200">115200</option><option value="230400">230400</option><option value="250000">250000</option><option value="460800">460800</option><option value="500000">500000</option><option value="921600">921600</option><option value="1000000">1000000</option><option value="2000000">2000000</option></select></label>
+            </div>
+            <div class="row">
+              <label class="field">Bit di dati<select id="ubits"><option>5</option><option>6</option><option>7</option><option selected>8</option><option>9</option></select></label>
+              <label class="field">Parità<select id="upar"><option value="none">Nessuna</option><option value="even">Pari</option><option value="odd">Dispari</option></select></label>
+            </div>
+            <div class="row">
+              <label class="field">Bit di stop<select id="ustop"><option value="1">1</option><option value="1.5">1,5</option><option value="2">2</option></select></label>
+              <label class="field">Livelli<select id="uinv"><option value="0">Normali (TTL)</option><option value="1">Invertiti (RS-232)</option></select></label>
+            </div>
+          </div>
+          <div class="row" id="o-ow">
+            <label class="field">Canale<select id="owch"></select></label><div></div>
+          </div>
+          <div class="row">
+            <label class="field" id="thrw0"><span><span id="thrl0">Soglia CH1</span> (<span class="unit">V</span>)</span><input id="thr0" type="number" step="0.05"></label>
+            <label class="field" id="thrw1"><span><span id="thrl1">Soglia CH2</span> (<span class="unit">V</span>)</span><input id="thr1" type="number" step="0.05"></label>
+          </div>
+          <div class="tools"><button class="btn" id="thrauto" type="button">Soglie automatiche</button><button class="btn" id="deccopy" type="button">Copia decodifica</button></div>
+          <div class="src" id="decinfo"></div>
+          <ol class="declist" id="declist" aria-label="Messaggi decodificati"></ol>
+        </div>
+        <div class="src warn" id="decnone" hidden></div>
+      </div>
+      <div class="card">
+        <h2>Esporta</h2>
+        <div class="tools">
+          <button class="btn primary" id="csv" type="button">Salva CSV</button>
+          <button class="btn" id="png" type="button">Salva immagine</button>
+          <button class="btn" id="copy" type="button">Copia CSV</button>
+        </div>
+        <div class="msg" id="msg" role="status"></div>
+        <div class="src">Il CSV contiene il tratto visibile: tempo in secondi e tensione in volt dei canali attivi, separati da punto e virgola.</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="card" id="scopecard">
+    <h2>Oscilloscopio</h2>
+    <p class="note" id="offhelp">Su macOS l'oscilloscopio si blocca con le letture grandi che il sistema fa normalmente: l'elenco dei file si vede, ma la copia dal Finder resta a 0 byte. Lo script <code>fnirsi.py</code>, nella cartella di questo visore, legge 4 kB alla volta senza cache e funziona sempre. Copia i file nuovi delle cartelle <code>Waveform</code> e <code>Screenshots</code> in <code>misure/oscilloscopio_AAAAMMGG</code>, senza mai sovrascrivere un file diverso con lo stesso nome (l'oscilloscopio riparte da 1 dopo una cancellazione). Poi apri qui la cartella con <b>Apri cartella</b>.</p>
+    <div id="live" hidden>
+      <div class="tools">
+        <span class="src" id="scopestate" role="status">Controllo il collegamento…</span>
+        <button class="btn" id="reload" type="button" disabled>Aggiorna elenco</button>
+        <button class="btn" id="eject" type="button" disabled>Espelli</button>
+      </div>
+      <div class="gallery" id="gallery" aria-label="File sull'oscilloscopio"></div>
+      <div class="tools" id="galtools" hidden>
+        <button class="btn" id="selnew" type="button">Seleziona i nuovi</button>
+        <button class="btn" id="selall" type="button">Tutti</button>
+        <button class="btn" id="selnone" type="button">Nessuno</button>
+        <button class="btn primary" id="dlscope" type="button" disabled>Scarica selezionati</button>
+        <button class="btn danger" id="delscope" type="button" disabled>Cancella dallo strumento</button>
+      </div>
+      <div class="msg" id="livemsg" role="status"></div>
+      <div class="files" id="shots" aria-label="Screenshot scaricati"></div>
+    </div>
+    <p class="note" id="livehint">Per scegliere i file dalle miniature, scaricarli e cancellarli dallo strumento apri il visore con <code>python3 fnirsi.py visore</code>. Senza il visore, il comando seguente copia i file da terminale.</p>
+    <div class="tools" id="cmdrow"><code id="cmd">python3 fnirsi.py scarica --csv --espelli</code><button class="btn" id="copycmd" type="button">Copia comando</button></div>
+    <p class="note">Prima di collegare l'USB metti l'acquisizione in STOP e salva tutto quello che serve. Se una lettura si blocca, lo script si ferma dopo 30 s: stacca e riattacca il cavo e rilancialo. Per le misure stacca l'USB dal Mac: il ritorno di massa attraverso il Mac aggiunge un'onda quadra di circa 1 kHz sulla massa.</p>
+  </div>
+
+  <details>
+    <summary>Come viene letto il file</summary>
+    <p class="note">Il file non è un WAV audio: è il formato interno dell'oscilloscopio. Una tabella all'inizio indica tre sezioni (impostazioni, miniatura dello schermo, dati). I campioni sono a 16 bit; lo schermo alto 8 divisioni vale 12800 conteggi, cioè 1600 conteggi per divisione.</p>
+    <p class="note">Dalle impostazioni vengono letti: canali accesi, V/div di ciascun canale (in microvolt), posizione dello zero (in pixel, 25 per divisione), tempo per divisione (in picosecondi), frequenza di campionamento e numero di campioni per canale. Tutti i valori sono big-endian, campioni compresi: prima tutti quelli di CH1, poi tutti quelli di CH2. Ogni canale contiene più acquisizioni della stessa finestra di 12 divisioni, salvate una dopo l'altra (2 a 1 ms/div, fino a 10 a 50 ns/div): la prima è quella che si vedeva sullo schermo, le altre si scelgono in <b>Acquisizione</b>. I primi campioni di ogni acquisizione sono vuoti e non vengono mostrati. Se un valore letto non è plausibile il campo è segnato da verificare e lo puoi correggere a mano. Le parti fuori dallo schermo sono tagliate dall'oscilloscopio e compaiono come tratti piatti al bordo.</p>
+  </details>
+</div>
+
+<script>
+const COUNTS_PER_DIV=1600, PX_PER_DIV=25, PTS_PER_DIV=1000, HDIV=12, VDIV=8;
+const $=id=>document.getElementById(id);
+const files=[]; let dec={proto:"",scl:0,sda:1,thr:[null,null],uch:"both",baud:"auto",bits:"8",par:"none",stop:"1",inv:"0",owch:0};
+let laneY={}, curT=null, curV=null, curVch=0, curDrag=null;
+let cur=-1, view=null, overlay=false, hover=null, drag=null;
+
+function u16be(b,o){return (b[o]<<8)|b[o+1]}
+function u32be(b,o){return ((b[o]<<24)>>>0)+(b[o+1]<<16)+(b[o+2]<<8)+b[o+3]}
+function u40be(b,o){let v=0;for(let i=0;i<5;i++)v=v*256+b[o+i];return v}
+function is125(x){if(!(x>0))return false;const e=Math.pow(10,Math.floor(Math.log10(x)));const m=Math.round(x/e*1000)/1000;return m===1||m===2||m===5}
+
+function parse(name,buf){
+  const b=new Uint8Array(buf);
+  if(b.length<0x3000)throw new Error(name+": file troppo corto per essere una forma d'onda FNIRSI.");
+  const tab=[];for(let i=0;i<7;i++)tab.push(u32be(b,i*4));
+  const tableOk=tab[0]===0x32&&tab[0]+tab[1]===tab[2]&&tab[2]+tab[3]===tab[4]&&tab[4]+tab[5]===tab[6]&&tab[6]===b.length;
+  // Firmware V40: tutti i campi sono big-endian. I campioni sono u16 a partire
+  // esattamente da tab[4]: prima tutto CH1, poi tutto CH2 (se acceso).
+  const start=tableOk?tab[4]:0x2ED2;
+  const n=tableOk?Math.floor(tab[5]/2):Math.floor((b.length-start)/2);
+  if(n<200)throw new Error(name+": nessun dato di forma d'onda trovato.");
+  const dv=new DataView(buf,start,n*2);
+  // Canali accesi (byte 0x66 e 0xA6), campioni per canale (u32 a 0x12D), campioni di
+  // un'acquisizione (u32 a 0x11D), frequenza di campionamento (Hz, 0x13D) e tempo/div.
+  // Ogni canale contiene più acquisizioni della stessa finestra di 12 divisioni, una
+  // dopo l'altra: la prima è quella che si vedeva sullo schermo.
+  const tps=u40be(b,0x1D8), tdivF=tps/1e12, tOk=is125(tdivF)&&tdivF>=1e-9&&tdivF<=100;
+  const rate=u32be(b,0x13D), rateOk=rate>0;
+  let on=[b[0x66]===1,b[0xA6]===1];if(!on[0]&&!on[1])on=[true,false];
+  const nch=(on[0]?1:0)+(on[1]?1:0);
+  let total=u32be(b,0x12D);if(!(total>0&&total*nch<=n))total=Math.floor(n/nch);
+  let per=u32be(b,0x11D);if(!(per>0&&per<=total&&total%per===0))per=total;
+  const nacq=total/per;
+  const all=[new Float64Array(total),new Float64Array(total)];   // NaN = nessun dato
+  let o=0;
+  for(let k=0;k<2;k++){
+    for(let a=0;a<nacq;a++){
+      const s=o+a*per;let lead=0;
+      if(on[k]){while(lead<Math.min(100,per)&&(dv.getUint16((s+lead)*2)===0||(lead===0&&dv.getUint16((s+1)*2)===0)))lead++}
+      for(let i=0;i<per;i++)all[k][a*per+i]=on[k]&&i>=lead?dv.getUint16((s+i)*2):NaN}
+    if(on[k])o+=total}
+  const raw=[all[0].subarray(0,per),all[1].subarray(0,per)];
+  const ch=[0,1].map(k=>{
+    const vOff=k?0xB2:0x72, pOff=k?0xBE:0x7E;
+    const vd=u32be(b,vOff)/1e6, pos=u16be(b,pOff);
+    const vOk=is125(vd)&&vd>=0.001&&vd<=100;
+    const zeroCounts=PX_PER_DIV*(COUNTS_PER_DIV/PX_PER_DIV)*0+ (pos-2)*(COUNTS_PER_DIV/PX_PER_DIV);
+    const zOk=zeroCounts>=-COUNTS_PER_DIV&&zeroCounts<=COUNTS_PER_DIV*(VDIV+1);
+    return {name:k?"CH2":"CH1",on:on[k],show:on[k],vdiv:vOk?vd:1,zeroDiv:zOk?zeroCounts/COUNTS_PER_DIV:(k?3:5),vOk,zOk};
+  });
+  ch.forEach(c=>{c.dispV=c.vdiv;c.dispPos=c.zeroDiv});   // scala e posizione di visualizzazione
+  const tdiv=tOk?tdivF:1;
+  return {name,raw,all,per,nacq,acq:0,ch,tdiv,tOk,tableOk,rateOk,dtS:rateOk?1/rate:tdiv/PTS_PER_DIV};
+}
+
+function volts(f,k,i){const c=f.ch[k];return (f.raw[k][i]/COUNTS_PER_DIV-c.zeroDiv)*c.vdiv}
+function clipped(f,k,i){const r=f.raw[k][i];return r<=8||r>=COUNTS_PER_DIV*VDIV-8}
+function dt(f){return f.dtS}
+
+function fmtV(v){if(!isFinite(v))return "—";const a=Math.abs(v);return a>=1?v.toFixed(3)+" V":(v*1000).toFixed(1)+" mV"}
+function fmtT(t,span){const s=span??Math.abs(t);if(s>=1)return t.toFixed(3)+" s";if(s>=1e-3)return (t*1e3).toFixed(3)+" ms";if(s>=1e-6)return (t*1e6).toFixed(3)+" µs";return (t*1e9).toFixed(2)+" ns"}
+function fmtDiv(x){const r=v=>+v.toPrecision(3);return x>=1?r(x)+" s":x>=1e-3?r(x*1e3)+" ms":x>=1e-6?r(x*1e6)+" µs":r(x*1e9)+" ns"}
+
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+
+function addFile(name,buf,tag){
+  try{const f=parse(name,buf);f.tag=tag||"";files.push(f);select(files.length-1);setMsg("")}
+  catch(e){setMsg(e.message,true)}
+}
+function select(i){cur=i;const f=files[i];view=[0,f.per-1];renderList();renderCards();syncInputs();resetCursors();refreshDecode(true)}
+
+function renderList(){
+  const L=$("list");L.textContent="";
+  files.forEach((f,i)=>{const b=document.createElement("button");b.type="button";b.className="chip";b.setAttribute("aria-pressed",i===cur);b.textContent=f.name;
+    if(f.tag){const t=document.createElement("span");t.className="tag";t.textContent=f.tag;b.appendChild(t)}
+    b.onclick=()=>select(i);L.appendChild(b)});
+}
+
+function renderCards(){
+  const f=files[cur];
+  [0,1].forEach(k=>{
+    const c=f.ch[k], el=$("card"+(k+1)), col=k?"--ch2":"--ch1";
+    el.innerHTML="";el.hidden=false;
+    const h=document.createElement("h2");h.innerHTML='<span class="swatch" style="background:var('+col+')"></span>';
+    const nm=document.createElement("span");nm.textContent="Canale "+(k+1);h.appendChild(nm);el.appendChild(h);
+    const r1=document.createElement("div");r1.className="row";
+    r1.appendChild(field("Nome","text",c.name,v=>{c.name=v||("CH"+(k+1));draw()},"name"+k));
+    r1.appendChild(knobField("V/div","vd"+k,c.dispV,x=>{if(x>0){c.dispV=x;draw()}}));
+    el.appendChild(r1);
+    const r2=document.createElement("div");r2.className="row";
+    r2.appendChild(field("Zero (div dal basso)","number",+c.dispPos.toFixed(2),v=>{const x=parseFloat(v);if(isFinite(x)){c.dispPos=x;draw()}},"zd"+k));
+    const chk=document.createElement("label");chk.className="check";chk.innerHTML='<input type="checkbox" id="sh'+k+'"'+(c.show?" checked":"")+'> Mostra';
+    chk.querySelector("input").onchange=e=>{c.show=e.target.checked;draw()};r2.appendChild(chk);el.appendChild(r2);
+    const src=document.createElement("div");src.className="src"+((c.on&&!(c.vOk&&c.zOk))?" warn":"");
+    const fit=document.createElement("div");fit.className="tools";
+    const bf=document.createElement("button");bf.className="btn";bf.type="button";bf.textContent="Adatta alla traccia";bf.disabled=!c.on;
+    bf.onclick=()=>{fitChannel(f,k);renderCards();draw()};
+    const bo=document.createElement("button");bo.className="btn";bo.type="button";bo.textContent="Come sullo strumento";bo.disabled=!c.on;
+    bo.onclick=()=>{c.dispV=c.vdiv;c.dispPos=c.zeroDiv;renderCards();draw()};
+    fit.append(bf,bo);el.appendChild(fit);
+    src.textContent=!c.on?"Canale spento al momento del salvataggio: nessun dato":(c.vOk&&c.zOk)?"Sullo strumento: "+fmtV(c.vdiv)+"/div, zero a "+(+c.zeroDiv.toFixed(2))+" div dal basso":"Da verificare: "+[!c.vOk&&"V/div",!c.zOk&&"zero"].filter(Boolean).join(" e ")+" non leggibili, valori di ripiego";
+    if(!c.on)chk.querySelector("input").disabled=true;
+    el.appendChild(src);
+    const dl=document.createElement("dl");dl.className="stats";dl.id="st"+k;el.appendChild(dl);
+  });
+  updateStats();
+}
+function step125(x,dir){const e=Math.pow(10,Math.floor(Math.log10(x)+1e-9)),m=x/e,seq=[1,2,5,10];
+  if(dir>0)return seq.find(q=>q>m*1.001)*e;for(let i=seq.length-1;i>=0;i--)if(seq[i]<m*0.999)return seq[i]*e;return 0.5*e}
+function ceil125(x){const e=Math.pow(10,Math.floor(Math.log10(x)));for(const m of [1,2,5,10])if(m*e>=x*0.999)return m*e;return 10*e}
+// Valori per divisione mostrati con l'unità adatta (V, mV, µV; s, ms, µs, ns): il campo
+// contiene al massimo 4 cifre e l'unità sta nell'etichetta sopra.
+const UNITS={V:[[1,"V"],[1e-3,"mV"],[1e-6,"µV"]],s:[[1,"s"],[1e-3,"ms"],[1e-6,"µs"],[1e-9,"ns"]]};
+function showScaled(inp,lab,x,base){const u=UNITS[base];let [f,n]=u[u.length-1];for(const [uf,un] of u)if(x>=uf*0.9995){f=uf;n=un;break}
+  inp.value=+(x/f).toPrecision(4);inp.dataset.f=f;lab.textContent=n+"/div"}
+function readScaled(inp){const x=parseFloat(String(inp.value).replace(",","."));return x*(+inp.dataset.f||1)}
+function knobField(label,id,val,on){
+  const d=document.createElement("div");d.className="field";
+  const lab=document.createElement("span");lab.className="unit";d.appendChild(lab);
+  const k=document.createElement("span");k.className="knob";
+  const i=document.createElement("input");i.type="number";i.step="any";i.min="0";i.id=id;i.setAttribute("aria-label",label);
+  const set=x=>{showScaled(i,lab,x,"V");on(x)};
+  const mk=(t,dir)=>{const b=document.createElement("button");b.className="btn";b.type="button";b.textContent=t;b.setAttribute("aria-label",(dir>0?"Più ":"Meno ")+label);
+    b.onclick=()=>{const x=readScaled(i);if(x>0)set(step125(x,dir))};return b};
+  i.onchange=()=>{const x=readScaled(i);if(x>0)set(x)};
+  i.onkeydown=e=>{if(e.key==="ArrowUp"||e.key==="ArrowDown"){e.preventDefault();const x=readScaled(i);if(x>0)set(step125(x,e.key==="ArrowUp"?1:-1))}};
+  showScaled(i,lab,+val,"V");
+  k.append(mk("−",-1),i,mk("+",1));d.appendChild(k);return d}
+function fitChannel(f,k){
+  const c=f.ch[k];let mn=Infinity,mx=-Infinity;
+  for(let i=view[0];i<=view[1];i++){const v=volts(f,k,i);if(isFinite(v)){mn=Math.min(mn,v);mx=Math.max(mx,v)}}
+  if(!isFinite(mn))return;
+  const vd=ceil125(Math.max(mx-mn,1e-4)/6.5);c.dispV=vd;c.dispPos=+(VDIV/2-(mn+mx)/2/vd).toFixed(2)}
+function field(label,type,val,on,id){const l=document.createElement("label");l.className="field";l.textContent=label;const i=document.createElement("input");i.type=type;i.id=id;if(type==="number")i.step="any";i.value=val;i.oninput=e=>on(e.target.value);l.appendChild(i);return l}
+
+function updateStats(){
+  const f=files[cur];if(!f)return;
+  [0,1].forEach(k=>{
+    const dl=$("st"+k);if(!dl)return;
+    let mn=Infinity,mx=-Infinity,s=0,n=0,cl=0;
+    for(let i=view[0];i<=view[1];i++){const v=volts(f,k,i);if(!isFinite(v))continue;mn=Math.min(mn,v);mx=Math.max(mx,v);s+=v;n++;if(clipped(f,k,i))cl++}
+    if(!n){dl.innerHTML="";return}
+    const rows=[["Min",fmtV(mn)],["Max",fmtV(mx)],["Media",fmtV(s/n)],["Picco-picco",fmtV(mx-mn)]];
+    if(cl)rows.push(["Fuori schermo",(100*cl/n).toFixed(1)+" %"]);
+    dl.innerHTML="";rows.forEach(([a,b])=>{const t=document.createElement("dt");t.textContent=a;const d=document.createElement("dd");d.textContent=b;dl.append(t,d)});
+  });
+}
+
+function syncInputs(){
+  const f=files[cur];
+  const d=dt(f);
+  showScaled($("tdiv"),$("tdivu"),vspan()*d/HDIV,"s");
+  $("npts").value=f.rateOk?fmtRate(1/d):"stimato";
+  // Da/A nell'unità adatta alla durata dell'acquisizione; le frecce si muovono di 1/12 dell'acquisizione
+  const tot=f.per*d,u=UNITS.s.find(([uf])=>tot>=uf*0.9995)||UNITS.s[UNITS.s.length-1],uf=u[0];
+  $("t0u").textContent=$("t1u").textContent=u[1];
+  for(const id of ["t0","t1"]){const e=$(id);e.dataset.f=uf;e.min=0;e.max=+(tot/uf).toPrecision(6);e.step=+(tot/HDIV/uf).toPrecision(6)}
+  $("t0").value=+(view[0]*d/uf).toPrecision(6);$("t1").value=+((view[1]+1)*d/uf).toPrecision(6);
+  // barra di scorrimento quando la vista è più stretta dell'acquisizione
+  const zoomed=vspan()<f.per,pb=$("panbar");
+  if(pb.hidden===zoomed){pb.hidden=!zoomed;requestAnimationFrame(resize)}
+  $("pan").max=f.per-vspan();$("pan").value=view[0];$("pan").step=1;
+  $("acqrow").hidden=f.nacq<2;
+  if(f.nacq>1){const s=$("acq");if(s.options.length!==f.nacq){s.textContent="";for(let a=0;a<f.nacq;a++){const o=document.createElement("option");o.value=a;o.textContent=(a+1)+"/"+f.nacq+(a===0?" schermo":"");s.appendChild(o)}}
+    s.value=f.acq;$("acqnote").textContent=f.acq===0?"Quella che si vedeva sullo schermo.":"Un'altra acquisizione della stessa finestra, salvata insieme alla prima."}
+  $("tsrc").className="src"+(f.tOk?"":" warn");
+  $("tsrc").textContent=!f.tOk?"Da verificare: base dei tempi non leggibile, uso 1 s/div":f.rateOk?"Base dei tempi e passo di campionamento ("+fmtT(f.dtS)+") letti dal file":"Base dei tempi letta dal file; passo stimato a 1000 punti per divisione";
+  $("fname").textContent=f.name;
+
+}
+function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+/* ---------- disegno ---------- */
+const cv=$("cv"), ctx=cv.getContext("2d");
+function geom(){
+  const W=cv.width,H=cv.height,dpr=W/cv.clientWidth||1;
+  // con le tracce sovrapposte la scala di CH2 va a destra: serve lo stesso margine
+  const f=files[cur], right=overlay&&f&&f.ch[0].show&&f.ch[1].show;
+  const L=Math.round(62*dpr),R=Math.round((right?62:14)*dpr),T=Math.round(10*dpr),B=Math.round(28*dpr);
+  const S=f&&f.dec?Math.round((f.dec.lanes.length*LANE_H+6)*dpr):0;   // fascia della decodifica sotto la griglia
+  return {W,H,dpr,L,R,T,B,S,pw:W-L-R,ph:H-T-B-S};
+}
+// Altezza del grafico. I pixel del canvas seguono sempre la dimensione a schermo (× dpr),
+// quindi non c'è mai stiramento. Vista in volt: alto quanto la colonna dei comandi, senza
+// superare la finestra. Vale sia per le tracce separate sia per quelle sovrapposte.
+function resize(){
+  const r=cv.getBoundingClientRect();if(!r.width)return;
+  const dpr=Math.min(window.devicePixelRatio||1,2), cssW=r.width;
+  let cssH;
+  {
+    cssH=cssW*(cssW<520?0.78:0.52);
+    if(!matchMedia("(max-width:860px)").matches){
+      const side=document.querySelector(".side").getBoundingClientRect().height;
+      const extra=cv.closest(".scope").getBoundingClientRect().height-r.height;
+      cssH=Math.max(cssH,Math.min(side-extra,window.innerHeight-24-extra));
+    }
+  }
+  cssH=Math.round(cssH);
+  if(cv.style.height!==cssH+"px")cv.style.height=cssH+"px";
+  const w=Math.round(cssW*dpr),h=Math.round(cssH*dpr);
+  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}
+  draw()}
+
+function niceStep(span,target){const raw=span/target;const e=Math.pow(10,Math.floor(Math.log10(raw)));for(const m of [1,2,2.5,5,10])if(m*e>=raw)return m*e;return 10*e}
+
+function drawEmpty(){
+  const W=cv.width,H=cv.height,dpr=W/cv.clientWidth||1;
+  ctx.fillStyle=css("--screen");ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=css("--screen-fg");ctx.textAlign="center";ctx.textBaseline="middle";ctx.font=(14*dpr)+"px "+css("--f-body");
+  ctx.fillText(SERVED?"Apri un file .wav oppure scaricalo dall'oscilloscopio":"Apri un file .wav o trascinalo qui",W/2,H/2)}
+function draw(){
+  const f=files[cur];if(!f){drawEmpty();return}
+  $("tb").innerHTML="<b>"+fmtDiv(+(vspan()*dt(f)/HDIV).toPrecision(3))+"/div</b> · "+f.ch.map((c,k)=>c.on&&c.show?'<span class="c'+(k+1)+'">'+escapeHtml(c.name)+" "+fmtV(c.dispV)+"/div</span>":"").filter(Boolean).join(" · ");
+  const g=geom();ctx.clearRect(0,0,g.W,g.H);
+  ctx.fillStyle=css("--screen");ctx.fillRect(0,0,g.W,g.H);
+  const shown=[0,1].filter(k=>f.ch[k].show);laneY={};
+  const i0=view[0],i1=view[1],d=dt(f);
+  const xOf=i=>g.L+(i-i0)/(i1-i0+1)*g.pw;   // ogni campione occupa un intervallo dt
+  ctx.font=(11*g.dpr)+"px "+css("--f-mono");
+  // asse dei tempi
+  // 12 divisioni orizzontali come sullo schermo dello strumento; etichette ogni 1, 2 o 3
+  // divisioni a seconda dello spazio, linea centrale più marcata
+  const span=(i1-i0+1)*d, dw=g.pw/HDIV, lab=Math.max(1,Math.ceil(80*g.dpr/dw)), every=lab>2?(lab>3?4:3):lab;
+  ctx.lineWidth=1;ctx.textAlign="center";ctx.textBaseline="top";
+  let lastR=-Infinity;
+  for(let j=0;j<=HDIV;j++){const x=Math.round(g.L+j*dw)+.5,t=(i0+(i1-i0+1)*j/HDIV)*d;
+    ctx.strokeStyle=j===HDIV/2?css("--grid-major"):css("--grid");ctx.beginPath();ctx.moveTo(x,g.T);ctx.lineTo(x,g.T+g.ph);ctx.stroke();
+    if(j%every===0){const txt=fmtT(t,span),w=ctx.measureText(txt).width,right=j===HDIV&&g.R<40*g.dpr,x0=right?x-w:x-w/2;
+      if(x0>lastR+8*g.dpr){ctx.fillStyle=css("--screen-fg");ctx.textAlign=right?"right":"center";ctx.fillText(txt,x,g.T+g.ph+g.S+6*g.dpr);lastR=x0+w}}}
+  ctx.textAlign="center";
+  if(overlay){ drawOverlay(f,g,xOf,shown); }
+  else{
+    const lanes=shown.length||1, gap=10*g.dpr, lh=(g.ph-gap*(lanes-1))/lanes;
+    shown.forEach((k,li)=>{
+      const top=g.T+li*(lh+gap);
+      const c=f.ch[k],vd=c.dispV,mn=-c.dispPos*vd,mx=(VDIV-c.dispPos)*vd;
+      const yOf=v=>top+lh-(v-mn)/(mx-mn)*lh;
+      laneY[k]={yOf,vOf:y=>mn+(top+lh-y)/lh*(mx-mn),top,h:lh};
+      ctx.textAlign="right";ctx.textBaseline="middle";
+      const every=lh/VDIV<16*g.dpr?2:1;
+      for(let j=0;j<=VDIV;j++){const v=mn+j*vd,y=Math.round(yOf(v))+.5;ctx.strokeStyle=Math.abs(v)<vd/1e3?css("--grid-major"):css("--grid");ctx.beginPath();ctx.moveTo(g.L,y);ctx.lineTo(g.L+g.pw,y);ctx.stroke();
+        if(j%every===0){ctx.fillStyle=css("--screen-fg");ctx.fillText(fmtV(+v.toPrecision(6)),g.L-6*g.dpr,y)}}
+      ctx.strokeStyle=css("--grid-major");ctx.strokeRect(g.L+.5,top+.5,g.pw-1,lh-1);
+      if(mn<0&&mx>0){const y0=Math.round(yOf(0))+.5;ctx.strokeStyle=css(k?"--ch2":"--ch1");ctx.globalAlpha=.55;ctx.setLineDash([6*g.dpr,4*g.dpr]);
+        ctx.beginPath();ctx.moveTo(g.L,y0);ctx.lineTo(g.L+g.pw,y0);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
+        ctx.fillStyle=css(k?"--ch2":"--ch1");ctx.textAlign="left";ctx.fillText("0",g.L+g.pw-14*g.dpr,y0-8*g.dpr)}
+      ctx.save();ctx.beginPath();ctx.rect(g.L,top,g.pw,lh);ctx.clip();
+      trace(f,k,xOf,yOf,g);ctx.restore();
+      ctx.fillStyle=css(k?"--ch2":"--ch1");ctx.textAlign="left";ctx.textBaseline="top";ctx.font="600 "+(12*g.dpr)+"px "+css("--f-mono");
+      ctx.fillText(f.ch[k].name,g.L+8*g.dpr,top+6*g.dpr);ctx.font=(11*g.dpr)+"px "+css("--f-mono");
+    });
+  }
+  if(f.dec)drawDecode(f,g,xOf);
+  drawCursors(f,g,xOf);updateCursorStats();
+  if(drag){ctx.fillStyle="rgba(127,160,150,.18)";const a=Math.min(drag.x0,drag.x1),w=Math.abs(drag.x1-drag.x0);ctx.fillRect(a,g.T,w,g.ph)}
+  if(hover!=null){const x=Math.round(xOf(hover))+.5;ctx.strokeStyle=css("--screen-fg");ctx.setLineDash([4*g.dpr,4*g.dpr]);ctx.beginPath();ctx.moveTo(x,g.T);ctx.lineTo(x,g.T+g.ph);ctx.stroke();ctx.setLineDash([])}
+}
+function drawOverlay(f,g,xOf,shown){
+  // Una sola griglia di 8 divisioni; ogni canale usa il suo V/div e il suo zero.
+  // Scala di CH1 a sinistra, di CH2 a destra, ciascuna nel colore del canale.
+  for(let j=0;j<=VDIV;j++){const y=Math.round(g.T+j*g.ph/VDIV)+.5;ctx.strokeStyle=j===VDIV/2?css("--grid-major"):css("--grid");ctx.beginPath();ctx.moveTo(g.L,y);ctx.lineTo(g.L+g.pw,y);ctx.stroke()}
+  ctx.strokeStyle=css("--grid-major");ctx.strokeRect(g.L+.5,g.T+.5,g.pw-1,g.ph-1);
+  const every=g.ph/VDIV<16*g.dpr?2:1;
+  let leftW=0;
+  shown.forEach((k,li)=>{
+    const c=f.ch[k],col=css(k?"--ch2":"--ch1"),vd=c.dispV;
+    const yOf=v=>g.T+g.ph-(v/vd+c.dispPos)/VDIV*g.ph;
+    laneY[k]={yOf,vOf:y=>((g.T+g.ph-y)/g.ph*VDIV-c.dispPos)*vd,top:g.T,h:g.ph};
+    const rightSide=li===1;
+    ctx.fillStyle=col;ctx.textBaseline="middle";ctx.textAlign=rightSide?"left":"right";
+    for(let j=0;j<=VDIV;j+=every){const v=(j-c.dispPos)*vd,y=g.T+g.ph-j/VDIV*g.ph;
+      ctx.fillText(fmtV(+v.toPrecision(6)),rightSide?g.L+g.pw+6*g.dpr:g.L-6*g.dpr,y)}
+    if(c.dispPos>0&&c.dispPos<VDIV){const y0=Math.round(yOf(0))+.5;ctx.strokeStyle=col;ctx.globalAlpha=.55;ctx.setLineDash([6*g.dpr,4*g.dpr]);
+      ctx.beginPath();ctx.moveTo(g.L,y0);ctx.lineTo(g.L+g.pw,y0);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1}
+    ctx.save();ctx.beginPath();ctx.rect(g.L,g.T,g.pw,g.ph);ctx.clip();
+    trace(f,k,xOf,yOf,g);ctx.restore();
+    ctx.fillStyle=col;ctx.textAlign=rightSide?"right":"left";ctx.textBaseline="top";ctx.font="600 "+(12*g.dpr)+"px "+css("--f-mono");
+    const label=c.name+"  "+fmtV(vd)+"/div", lw=ctx.measureText(label).width;
+    const down=rightSide&&leftW+lw+24*g.dpr>g.pw?16*g.dpr:0;   // poco spazio: CH2 sulla riga sotto
+    ctx.fillText(label,rightSide?g.L+g.pw-8*g.dpr:g.L+8*g.dpr,g.T+6*g.dpr+down);if(!rightSide)leftW=lw;
+    ctx.font=(11*g.dpr)+"px "+css("--f-mono");
+  });
+}
+function trace(f,k,xOf,yOf,g){
+  const i0=view[0],i1=view[1];const px=Math.max(1,Math.floor((i1-i0)/g.pw));
+  ctx.strokeStyle=css(k?"--ch2":"--ch1");ctx.lineWidth=Math.max(1,1.2*g.dpr);ctx.beginPath();let pen=false;
+  for(let i=i0;i<=i1;i+=px){
+    let mn=Infinity,mx=-Infinity;for(let j=i;j<Math.min(i+px,i1+1);j++){const v=volts(f,k,j);if(isFinite(v)){mn=Math.min(mn,v);mx=Math.max(mx,v)}}
+    if(!isFinite(mn)){pen=false;continue}
+    const x=xOf(i);if(!pen){ctx.moveTo(x,yOf(mn));pen=true}else ctx.lineTo(x,yOf(mn));if(mx!==mn)ctx.lineTo(x,yOf(mx));
+  }
+  ctx.stroke();
+}
+
+/* ---------- decodifica dei bus: I²C, UART, 1-Wire ---------- */
+// Ogni canale viene digitalizzato con una soglia (automatica: metà escursione) e un'isteresi
+// del 5 % dell'escursione. Ogni decodificatore restituisce:
+//   lanes: righe della fascia sotto il grafico, ciascuna con annotazioni {i0,i1,kind,label,short,ok}
+//   rows:  messaggi per l'elenco {i0,i1,parts:[{t,bad}]}
+//   thr:   soglia usata per canale, info/warn: testo sotto i comandi
+function chRange(f,k){let mn=Infinity,mx=-Infinity;for(let i=0;i<f.per;i++){const v=volts(f,k,i);if(isFinite(v)){if(v<mn)mn=v;if(v>mx)mx=v}}return [mn,mx]}
+function hex2(v,w){return "0x"+v.toString(16).toUpperCase().padStart(w||2,"0")}
+function hx(v,w){return v.toString(16).toUpperCase().padStart(w||2,"0")}
+function digit(f,k){
+  const n=f.per,[mn,mx]=chRange(f,k),t=dec.thr[k]??(mn+mx)/2,h=Math.max((mx-mn)*0.05,1e-6),d=new Int8Array(n);let st=-1;
+  for(let i=0;i<n;i++){const v=volts(f,k,i);if(!isFinite(v)){d[i]=-1;continue}
+    if(st<0)st=v>t?1:0;else if(st===0&&v>t+h)st=1;else if(st===1&&v<t-h)st=0;d[i]=st}
+  return {d,t,swing:mx-mn}}
+function edges(d){const e=[];for(let i=1;i<d.length;i++)if(d[i]>=0&&d[i-1]>=0&&d[i]!==d[i-1])e.push(i);return e}
+
+// ---- I²C ----
+// START = SDA scende con SCL alto, STOP = SDA sale con SCL alto; a ogni fronte di salita di SCL
+// si legge un bit di SDA; 9 bit = 8 di dati (MSB prima) + ACK (0) / NACK (1). Il primo byte
+// dopo uno START è l'indirizzo a 7 bit più R/W.
+function decI2C(f){
+  const n=f.per,A=digit(f,dec.scl),B=digit(f,dec.sda),C=A.d,D=B.d;
+  const ann=[],rows=[];let inF=false,bits=[],bi=[],nb=0,row=null;const rises=[];
+  for(let i=1;i<n;i++){
+    if(C[i]<0||D[i]<0||C[i-1]<0||D[i-1]<0)continue;
+    if(C[i]===1&&C[i-1]===1&&D[i]!==D[i-1]){
+      if(D[i]===0){
+        if(inF&&row){ann.push({i0:i,i1:i,kind:"mark",label:"Sr",ok:true});row.parts.push({t:"Sr"})}
+        else{row={i0:i,i1:i,parts:[{t:"S"}]};rows.push(row);ann.push({i0:i,i1:i,kind:"mark",label:"S",ok:true})}
+        inF=true;bits=[];bi=[];nb=0}
+      else if(inF){ann.push({i0:i,i1:i,kind:"mark",label:"P",ok:false});if(row){row.parts.push({t:"P"});row.i1=i}inF=false;row=null;bits=[];bi=[]}
+      continue}
+    if(C[i]===1&&C[i-1]===0){rises.push(i);
+      if(inF){bits.push(D[i]);bi.push(i);
+        if(bits.length===9){const v=bits.slice(0,8).reduce((a,b)=>a*2+b,0),ack=bits[8]===0,first=nb===0,half=(bi[1]-bi[0])/2;
+          const label=first?hex2(v>>1)+(v&1?" R":" W"):hex2(v);
+          ann.push({i0:Math.round(bi[0]-half),i1:Math.round(bi[8]+half),kind:"box",label:label+(ack?"":" N"),short:hx(first?v>>1:v),ok:ack});
+          row.parts.push({t:(first?"["+label+"]":label)+(ack?"":" NACK"),bad:!ack});row.i1=bi[8];nb++;bits=[];bi=[]}}}}
+  let per=null;if(rises.length>4){const dd=[];for(let j=1;j<rises.length;j++)dd.push(rises[j]-rises[j-1]);dd.sort((a,b)=>a-b);per=dd[dd.length>>2]}
+  const thr=[];thr[dec.scl]=A.t;thr[dec.sda]=B.t;
+  let info=(rows.length?plural(rows.length,"messaggio","messaggi"):"Nessun messaggio trovato"),warn="";
+  if(rows.length&&per){info+=" · SCL circa "+fmtF(1/(per*dt(f)))+" ("+Math.round(per)+" campioni per periodo)";
+    if(per<8)warn="Campionamento troppo lento per questo bus: con meno di 8 campioni per periodo di SCL i bit possono essere letti male, usa una base dei tempi più veloce."}
+  if(inF)info+=". L'ultimo messaggio continua oltre la fine dell'acquisizione";
+  return {lanes:[{name:"I²C",ann}],rows,thr,info,warn}}
+
+// ---- UART ----
+// Riposo alto (livelli TTL) o basso (RS-232 invertito). Il fronte di discesa è il bit di start;
+// ogni bit si legge al centro: dati LSB prima, parità facoltativa, stop che deve essere alto.
+const BAUDS=[300,600,1200,2400,4800,9600,14400,19200,28800,31250,38400,57600,76800,115200,230400,250000,460800,500000,921600,1000000,2000000];
+function estBaud(f,ds){
+  const iv=[];ds.forEach(d=>{const e=edges(d);for(let j=1;j<e.length;j++)iv.push(e[j]-e[j-1])});
+  if(iv.length<4)return null;iv.sort((a,b)=>a-b);
+  const w=iv[Math.floor(iv.length*0.05)];const b=1/(w*dt(f));
+  const near=BAUDS.reduce((a,c)=>Math.abs(c-b)<Math.abs(a-b)?c:a);
+  return Math.abs(near-b)/near<0.08?near:Math.round(b)}
+function decUART(f,chans){
+  const D=chans.map(k=>digit(f,k));
+  const baud=dec.baud==="auto"?estBaud(f,D.map(x=>x.d)):+dec.baud;
+  const thr=[];chans.forEach((k,j)=>thr[k]=D[j].t);
+  if(!baud)return {lanes:chans.map(k=>({name:f.ch[k].name,ann:[]})),rows:[],thr,info:"Nessuna trasmissione trovata",warn:""};
+  const bl=1/(baud*dt(f)),nbits=+dec.bits,stop=+dec.stop,inv=dec.inv==="1",par=dec.par,n=f.per;
+  const lanes=[],rows=[];let nerr=0,nbytes=0;
+  chans.forEach((k,j)=>{
+    const d=D[j].d,lv=i=>inv?1-d[i]:d[i],ann=[];let row=null,prevEnd=-1e9;
+    let i=1;
+    while(i<n){
+      if(d[i]<0||d[i-1]<0||!(lv(i-1)===1&&lv(i)===0)){i++;continue}
+      const s=i,at=b=>Math.round(s+(b+0.5)*bl);
+      if(at(0)>=n)break;
+      if(lv(at(0))!==0){i++;continue}
+      let v=0,ones=0,pos=1,cut=false;
+      for(let b=0;b<nbits;b++,pos++){const c=at(pos);if(c>=n){cut=true;break}const bit=lv(c);v|=bit<<b;ones+=bit}
+      let perr=false;
+      if(!cut&&par!=="none"){const c=at(pos);if(c>=n)cut=true;else{const tot=ones+lv(c);perr=par==="even"?tot%2!==0:tot%2!==1;pos++}}
+      if(cut||at(pos)>=n)break;
+      const ferr=lv(at(pos))!==1,end=Math.min(n-1,Math.round(s+(pos+stop)*bl)),ok=!perr&&!ferr;
+      const pr=v>=32&&v<127,label=(pr?"'"+String.fromCharCode(v)+"'":hex2(v,nbits>8?3:2))+(ferr?" FE":perr?" PE":"");
+      ann.push({i0:s,i1:end,kind:"box",label,short:pr?String.fromCharCode(v):hx(v,nbits>8?3:2),ok});
+      nbytes++;if(!ok)nerr++;
+      if(!row||s-prevEnd>2*(pos+stop)*bl){row={i0:s,i1:end,ch:k,bytes:[],parts:[]};rows.push(row)}
+      row.bytes.push({v,ok,ferr,perr});row.i1=end;prevEnd=end;
+      i=at(pos)+1}
+    lanes.push({name:f.ch[k].name,ann})});
+  rows.sort((a,b)=>a.i0-b.i0);
+  const esc=v=>v===13?"\\r":v===10?"\\n":v===9?"\\t":v>=32&&v<127?String.fromCharCode(v):"·";
+  rows.forEach(r=>{r.parts=[{t:f.ch[r.ch].name+":"},...r.bytes.map(b=>({t:hx(b.v)+(b.ferr?"(FE)":b.perr?"(PE)":""),bad:!(b.ok)})),{t:'"'+r.bytes.map(b=>esc(b.v)).join("")+'"'}]});
+  let info=plural(nbytes,"carattere","caratteri")+" a "+(baud>=1000?+(baud/1000).toPrecision(4)+" k":baud+" ")+"baud ("+(dec.baud==="auto"?"stimata":"impostata")+")"+
+    " · "+nbits+(par==="none"?"N":par==="even"?"E":"O")+(stop===1.5?"1,5":stop),warn="";
+  if(nerr)info+=" · "+plural(nerr,"errore","errori")+" (FE = stop mancante, PE = parità)";
+  if(bl<4)warn="Campionamento troppo lento per questa velocità: servono almeno 4 campioni per bit (ora "+bl.toFixed(1)+"), usa una base dei tempi più veloce.";
+  if(nerr&&nbytes&&nerr/nbytes>0.3)warn+=(warn?" ":"")+"Molti errori: controlla velocità, parità, numero di bit e livelli.";
+  return {lanes,rows,thr,info,warn}}
+
+// ---- 1-Wire (velocità standard) ----
+// Impulsi bassi: ≥ 380 µs reset; dopo il reset, un impulso di 60–240 µs del dispositivo è la
+// presenza; < 15 µs bit 1, 15–150 µs bit 0. Byte LSB prima. Il primo byte dopo il reset è il
+// comando ROM; dopo Skip ROM / Match ROM (8 byte di ROM) viene il comando di funzione.
+const OW_ROM={0x33:"Read ROM",0x55:"Match ROM",0xCC:"Skip ROM",0xF0:"Search ROM",0xEC:"Alarm Search",0x3C:"Overdrive Skip",0x69:"Overdrive Match"};
+const OW_FN={0x44:"Convert T",0xBE:"Read Scratchpad",0x4E:"Write Scratchpad",0x48:"Copy Scratchpad",0xB8:"Recall E²",0xB4:"Read Power Supply"};
+function crc8(bs){let c=0;for(let x of bs){for(let b=0;b<8;b++){const m=(c^x)&1;c>>=1;if(m)c^=0x8C;x>>=1}}return c}
+function decOW(f,k){
+  const A=digit(f,k),d=A.d,n=f.per,us=dt(f)*1e6,ann=[],rows=[];
+  const pulses=[];let a=-1;
+  for(let i=1;i<n;i++){if(d[i]<0||d[i-1]<0)continue;if(d[i-1]===1&&d[i]===0)a=i;else if(d[i-1]===0&&d[i]===1&&a>=0){pulses.push([a,i]);a=-1}}
+  let tr=null,bits=[],bi=[],lastResetEnd=-1;
+  const finishByte=()=>{const v=bits.reduce((acc,b,j)=>acc|(b<<j),0);tr.bytes.push({v,i0:bi[0],i1:bi[7]});bits=[];bi=[]};
+  for(const [p0,p1] of pulses){
+    const w=(p1-p0)*us;
+    if(w>=380){tr={i0:p0,i1:p1,presence:false,bytes:[],bad:0};rows.push(tr);lastResetEnd=p1;bits=[];bi=[];
+      ann.push({i0:p0,i1:p1,kind:"box",label:"Reset",short:"R",ok:true});continue}
+    if(!tr)continue;
+    const gap=(p0-lastResetEnd)*us;
+    if(lastResetEnd>=0&&!tr.presence&&tr.bytes.length===0&&bits.length===0&&gap>=10&&gap<=80&&w>=50&&w<=260){
+      tr.presence=true;ann.push({i0:p0,i1:p1,kind:"box",label:"Presenza",short:"P",ok:true});tr.i1=p1;continue}
+    if(w<15)bits.push(1);else if(w<=150)bits.push(0);else{tr.bad++;continue}
+    bi.push(p0);tr.i1=p1;if(bits.length===8)finishByte()}
+  // interpretazione dei comandi
+  rows.forEach(t=>{
+    t.parts=[{t:"Reset"},t.presence?{t:"presenza"}:{t:"nessuna presenza",bad:true}];
+    const by=t.bytes;let j=0,fn=null;
+    const lab=(b,txt,ok=true)=>{ann.push({i0:b.i0,i1:b.i1+Math.round(60/us),kind:"box",label:txt,short:hx(b.v),ok})};
+    if(!by.length)return;
+    const rom=by[0].v;lab(by[0],hx(rom)+" "+(OW_ROM[rom]||"?"));t.parts.push({t:hx(rom)+" "+(OW_ROM[rom]||"comando ROM sconosciuto")});j=1;
+    if(rom===0xF0||rom===0xEC){t.parts.push({t:"(la ricerca usa bit singoli: i byte successivi non sono decodificati)"});return}
+    if(rom===0x55||rom===0x33){const id=by.slice(j,j+8);id.forEach(b=>lab(b,hx(b.v)));
+      if(id.length===8){const ok=crc8(id.slice(0,7).map(b=>b.v))===id[7].v;t.parts.push({t:"ROM "+id.map(b=>hx(b.v)).join(" ")+(ok?" (CRC ok)":" (CRC errato)"),bad:!ok})}
+      j+=8;if(rom===0x33)return}
+    if(j<by.length){fn=by[j].v;lab(by[j],hx(fn)+" "+(OW_FN[fn]||""));t.parts.push({t:hx(fn)+(OW_FN[fn]?" "+OW_FN[fn]:"")});j++}
+    const rest=by.slice(j);rest.forEach(b=>lab(b,hx(b.v)));
+    if(rest.length){
+      let note="";
+      if(fn===0xBE&&rest.length>=9){const sp=rest.slice(0,9).map(b=>b.v),ok=crc8(sp.slice(0,8))===sp[8];
+        let raw=sp[0]|(sp[1]<<8);if(raw&0x8000)raw-=0x10000;
+        note=(ok?" (CRC ok":" (CRC errato")+"; se è un DS18B20: "+(raw/16).toFixed(4).replace(/0+$/,"").replace(/\.$/,"")+" °C)";
+        t.parts.push({t:"dati "+rest.map(b=>hx(b.v)).join(" ")+note,bad:!ok})}
+      else t.parts.push({t:"dati "+rest.map(b=>hx(b.v)).join(" ")})}
+    if(t.bad)t.parts.push({t:plural(t.bad,"impulso non riconosciuto","impulsi non riconosciuti"),bad:true})});
+  const thr=[];thr[k]=A.t;
+  let info=rows.length?plural(rows.length,"transazione","transazioni"):"Nessun reset trovato",warn="";
+  if(us>3)warn="Campionamento troppo lento per il 1-Wire: servono campioni ogni 3 µs o meno (ora "+us.toFixed(1)+" µs), usa una base dei tempi più veloce.";
+  return {lanes:[{name:f.ch[k].name,ann}],rows,thr,info,warn}}
+
+function plural(n,a,b){return n+" "+(n===1?a:b)}
+function edgeCount(f,k){return edges(digit(f,k).d).length}
+function rowText(f,r){return fmtT(r.i0*dt(f),f.per*dt(f))+"  "+r.parts.map(p=>p.t).join(" ")}
+function refreshDecode(auto){
+  const f=files[cur];if(!f)return;
+  const on=[0,1].filter(k=>f.ch[k].on),p=dec.proto;
+  if(auto&&p){
+    if(on.length===2&&p==="i2c"){dec.scl=edgeCount(f,0)>=edgeCount(f,1)?0:1;dec.sda=1-dec.scl}
+    if(!on.includes(dec.owch))dec.owch=on[0]??0;
+    dec.uch=on.length===2?"both":String(on[0]??0);
+    dec.thr=[null,null]}
+  const fill=(id,val,opts)=>{const s=$(id);s.textContent="";opts.forEach(([v,t])=>{const o=document.createElement("option");o.value=v;o.textContent=t;s.appendChild(o)});s.value=String(val)};
+  const nm=k=>f.ch[k].name;
+  fill("decscl",dec.scl,[[0,nm(0)],[1,nm(1)]]);fill("decsda",dec.sda,[[0,nm(0)],[1,nm(1)]]);
+  fill("owch",dec.owch,on.map(k=>[k,nm(k)]));
+  fill("uch",dec.uch,(on.length===2?[["both",nm(0)+" e "+nm(1)]]:[]).concat(on.map(k=>[String(k),"Solo "+nm(k)])));
+  $("decopts").hidden=!p;["i2c","uart","ow"].forEach(q=>$("o-"+q).hidden=p!==q);
+  let res=null,need="";
+  if(p==="i2c"){if(on.length<2)need="Per l'I²C servono entrambi i canali accesi.";else if(dec.scl===dec.sda)need="SCL e SDA devono essere canali diversi.";else res=decI2C(f)}
+  else if(p==="uart"){const ch=dec.uch==="both"?on:[+dec.uch].filter(k=>on.includes(k));if(!ch.length)need="Nessun canale acceso.";else res=decUART(f,ch)}
+  else if(p==="ow"){if(!on.includes(dec.owch))need="Nessun canale acceso.";else res=decOW(f,dec.owch)}
+  f.dec=res;
+  $("decnone").hidden=!need;$("decnone").textContent=need;
+  [0,1].forEach(k=>{const used=res&&res.thr[k]!==undefined;$("thrw"+k).hidden=!used;if(used){$("thr"+k).value=+res.thr[k].toFixed(3);$("thrl"+k).textContent="Soglia "+nm(k)}});
+  $("decinfo").textContent=res?res.info+(res.warn?". "+res.warn:"."):"";$("decinfo").className="src"+(res&&res.warn?" warn":"");
+  const L=$("declist");L.textContent="";
+  if(res)res.rows.forEach(row=>{const li=document.createElement("li"),b=document.createElement("button");b.type="button";
+    const t=document.createElement("span");t.className="t";t.textContent=fmtT(row.i0*dt(f),f.per*dt(f));b.appendChild(t);
+    row.parts.forEach((x,j)=>{const sp=document.createElement("span");sp.textContent=(j?" ":"")+x.t;if(x.bad)sp.className="nack";b.appendChild(sp)});
+    b.title="Ingrandisci questo messaggio";
+    b.onclick=()=>{const m=Math.max(20,Math.round((row.i1-row.i0)*0.08));view=[Math.max(0,row.i0-m),Math.min(f.per-1,row.i1+m)];syncInputs();updateStats();draw()};
+    li.appendChild(b);L.appendChild(li)});
+  resize()}
+const LANE_H=24;
+function drawDecode(f,g,xOf){
+  const lanes=f.dec.lanes,i0=view[0],i1=view[1],lh=LANE_H*g.dpr,ok=css("--accent"),bad=css("--warn"),fg=css("--screen-fg");
+  ctx.font="600 "+(11*g.dpr)+"px "+css("--f-mono");ctx.textBaseline="middle";
+  lanes.forEach((ln,li)=>{
+    const y0=g.T+g.ph+4*g.dpr+li*lh,h=lh-4*g.dpr,ym=y0+h/2;
+    if(lanes.length>1){ctx.fillStyle=fg;ctx.textAlign="right";ctx.fillText(ln.name,g.L-6*g.dpr,ym)}
+    ctx.save();ctx.beginPath();ctx.rect(g.L,y0-2*g.dpr,g.pw,h+4*g.dpr);ctx.clip();ctx.textAlign="center";
+    for(const a of ln.ann){
+      if(a.i1<i0||a.i0>i1)continue;
+      const x0=xOf(a.i0),x1=Math.max(x0+2*g.dpr,xOf(a.i1)),col=a.ok?ok:bad;
+      if(a.kind==="mark"){ctx.fillStyle=col;ctx.fillRect(Math.round(x0)-g.dpr,y0,2*g.dpr,h);ctx.textAlign="left";ctx.fillText(a.label,x0+3*g.dpr,ym);ctx.textAlign="center";continue}
+      const r=Math.min(h/2,(x1-x0)/2);
+      ctx.strokeStyle=col;ctx.lineWidth=Math.max(1,g.dpr);ctx.beginPath();
+      ctx.moveTo(x0,ym);ctx.lineTo(x0+r,y0);ctx.lineTo(x1-r,y0);ctx.lineTo(x1,ym);ctx.lineTo(x1-r,y0+h);ctx.lineTo(x0+r,y0+h);ctx.closePath();
+      ctx.globalAlpha=.18;ctx.fillStyle=col;ctx.fill();ctx.globalAlpha=1;ctx.stroke();
+      ctx.fillStyle=fg;
+      if(ctx.measureText(a.label).width<x1-x0-2*r)ctx.fillText(a.label,(x0+x1)/2,ym);
+      else if(a.short&&ctx.measureText(a.short).width<x1-x0-r)ctx.fillText(a.short,(x0+x1)/2,ym)}
+    ctx.restore()});
+  ctx.font=(11*g.dpr)+"px "+css("--f-mono");ctx.textAlign="center";ctx.textBaseline="top"}
+$("proto").onchange=e=>{dec.proto=e.target.value;refreshDecode(true)};
+$("decscl").onchange=e=>{dec.scl=+e.target.value;dec.sda=1-dec.scl;refreshDecode()};
+$("decsda").onchange=e=>{dec.sda=+e.target.value;dec.scl=1-dec.sda;refreshDecode()};
+$("owch").onchange=e=>{dec.owch=+e.target.value;refreshDecode()};
+[["uch","uch"],["ubaud","baud"],["ubits","bits"],["upar","par"],["ustop","stop"],["uinv","inv"]].forEach(([id,key])=>{$(id).onchange=e=>{dec[key]=e.target.value;refreshDecode()}});
+[0,1].forEach(k=>{$("thr"+k).onchange=e=>{const x=parseFloat(String(e.target.value).replace(",","."));if(isFinite(x)){dec.thr[k]=x;refreshDecode()}}});
+$("thrauto").onclick=()=>{dec.thr=[null,null];refreshDecode()};
+$("deccopy").onclick=async()=>{const f=files[cur];if(!f||!f.dec)return;const t=f.dec.rows.map(r=>rowText(f,r)).join("\n")+"\n";
+  try{await navigator.clipboard.writeText(t);$("decinfo").textContent="Decodifica copiata negli appunti ("+plural(f.dec.rows.length,"riga","righe")+")."}catch(e){$("decinfo").textContent="Gli appunti non sono disponibili qui."}};
+
+/* ---------- cursori ---------- */
+function drawCursors(f,g,xOf){
+  const d=dt(f),fg=css("--screen-fg");ctx.lineWidth=Math.max(1,g.dpr);ctx.font="600 "+(11*g.dpr)+"px "+css("--f-mono");
+  const tag=(txt,x,y,col,align)=>{ctx.textAlign=align;ctx.textBaseline="top";const w=ctx.measureText(txt).width+6*g.dpr,h=14*g.dpr;
+    const x0=align==="left"?x:x-w;ctx.fillStyle=css("--screen");ctx.fillRect(x0,y,w,h);ctx.fillStyle=col;ctx.fillText(txt,align==="left"?x+3*g.dpr:x-3*g.dpr,y+1.5*g.dpr)};
+  if(curT)curT.forEach((t,j)=>{const x=Math.round(xOf(t/d))+.5;if(x<g.L-1||x>g.L+g.pw+1)return;
+    ctx.strokeStyle=fg;ctx.setLineDash([3*g.dpr,3*g.dpr]);ctx.beginPath();ctx.moveTo(x,g.T);ctx.lineTo(x,g.T+g.ph);ctx.stroke();ctx.setLineDash([]);
+    tag("T"+(j+1),x+2*g.dpr,g.T+g.ph-16*g.dpr,fg,"left")});
+  const L=laneY[curVch];
+  if(curV&&L){const col=css(curVch?"--ch2":"--ch1");curV.forEach((v,j)=>{const y=Math.round(L.yOf(v))+.5;if(y<L.top-1||y>L.top+L.h+1)return;
+    ctx.strokeStyle=col;ctx.setLineDash([3*g.dpr,3*g.dpr]);ctx.beginPath();ctx.moveTo(g.L,y);ctx.lineTo(g.L+g.pw,y);ctx.stroke();ctx.setLineDash([]);
+    tag("V"+(j+1),g.L+g.pw-2*g.dpr,y-15*g.dpr,col,"right")})}
+  ctx.font=(11*g.dpr)+"px "+css("--f-mono");
+}
+function vAt(f,k,t){const i=Math.min(f.per-1,Math.max(0,Math.round(t/dt(f))));return volts(f,k,i)}
+function fmtRate(x){return x>=1e9?+(x/1e9).toPrecision(4)+" GS/s":x>=1e6?+(x/1e6).toPrecision(4)+" MS/s":x>=1e3?+(x/1e3).toPrecision(4)+" kS/s":+x.toPrecision(4)+" S/s"}
+function fmtF(x){if(!isFinite(x))return "—";const a=Math.abs(x);return a>=1e6?(x/1e6).toPrecision(4)+" MHz":a>=1e3?(x/1e3).toPrecision(4)+" kHz":x.toPrecision(4)+" Hz"}
+function updateCursorStats(){
+  const f=files[cur],dl=$("curstats");if(!f)return;
+  const rows=[];
+  if(curT){const [a,b]=curT,dtt=b-a,sp=vspan()*dt(f);
+    rows.push(["T1",fmtT(a,sp)],["T2",fmtT(b,sp)],["Δt",fmtT(dtt,Math.abs(dtt))],["1/Δt",dtt?fmtF(1/Math.abs(dtt)):"—"]);
+    [0,1].forEach(k=>{const c=f.ch[k];if(!c.on||!c.show)return;const v1=vAt(f,k,a),v2=vAt(f,k,b);
+      rows.push([c.name+" in T1",fmtV(v1),k],[c.name+" in T2",fmtV(v2),k],[c.name+" Δ (T2−T1)",fmtV(v2-v1),k])})}
+  if(curV&&f.ch[curVch]){const [a,b]=curV,n=f.ch[curVch].name;
+    rows.push(["V1 ("+n+")",fmtV(a),curVch],["V2 ("+n+")",fmtV(b),curVch],["ΔV (V2−V1)",fmtV(b-a),curVch])}
+  const d=dt(f),inT=t=>t>=view[0]*d-1e-15&&t<=view[1]*d+1e-15,L=laneY[curVch];
+  const outT=curT&&!curT.every(inT), outV=curV&&L&&!curV.every(v=>{const y=L.yOf(v);return y>=L.top-1&&y<=L.top+L.h+1});
+  $("curhere").hidden=!(outT||outV);
+  dl.textContent="";
+  rows.forEach(([a,b,k])=>{const t=document.createElement("dt");t.textContent=a;const d=document.createElement("dd");d.textContent=b;if(k!==undefined){t.className=d.className="c"+(k+1)}dl.append(t,d)});
+}
+function defaultT(f){const d=dt(f),a=view[0]+vspan()/3,b=view[0]+2*vspan()/3;return [Math.round(a)*d,Math.round(b)*d]}
+function defaultV(f,k){const c=f.ch[k],mn=-c.dispPos*c.dispV,mx=(VDIV-c.dispPos)*c.dispV;return [mn+(mx-mn)/3,mn+2*(mx-mn)/3]}
+function syncCursorUI(){
+  const f=files[cur];if(!f)return;
+  const on=[0,1].filter(k=>f.ch[k].on);
+  if(!on.includes(curVch))curVch=on[0]??0;
+  const sel=$("curvch");sel.textContent="";on.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=f.ch[k].name;sel.appendChild(o)});sel.value=curVch;
+  $("curvchw").hidden=!curV||on.length<2;
+  $("curt").setAttribute("aria-pressed",!!curT);$("curv").setAttribute("aria-pressed",!!curV);
+  cv.style.touchAction=curV?"none":"pan-y";
+}
+function resetCursors(){const f=files[cur];if(!f)return;if(curT)curT=defaultT(f);syncCursorUI();if(curV)curV=defaultV(f,curVch)}
+$("curt").onclick=()=>{const f=files[cur];if(!f)return;curT=curT?null:defaultT(f);syncCursorUI();draw()};
+$("curv").onclick=()=>{const f=files[cur];if(!f)return;syncCursorUI();curV=curV?null:defaultV(f,curVch);syncCursorUI();draw()};
+$("curhere").onclick=()=>{const f=files[cur];if(!f)return;const d=dt(f),L=laneY[curVch];
+  if(curT&&!curT.every(t=>t>=view[0]*d&&t<=view[1]*d))curT=defaultT(f);
+  if(curV&&L&&!curV.every(v=>{const y=L.yOf(v);return y>=L.top&&y<=L.top+L.h}))curV=defaultV(f,curVch);draw()};
+$("curvch").onchange=e=>{const f=files[cur];curVch=+e.target.value;if(curV)curV=defaultV(f,curVch);syncCursorUI();draw()};
+function cursorHit(ev){
+  const f=files[cur];if(!f||!(curT||curV))return null;
+  const g=geom(),r=cv.getBoundingClientRect(),x=(ev.clientX-r.left)*g.dpr,y=(ev.clientY-r.top)*g.dpr,tol=(ev.pointerType==="touch"?16:7)*g.dpr;
+  const xOf=i=>g.L+(i-view[0])/vspan()*g.pw;let best=null;
+  if(curT&&y>=g.T&&y<=g.T+g.ph)curT.forEach((t,j)=>{const dd=Math.abs(xOf(t/dt(f))-x);if(dd<tol&&(!best||dd<best.d))best={type:"t",j,d:dd}});
+  const L=laneY[curVch];
+  if(curV&&L&&x>=g.L&&x<=g.L+g.pw)curV.forEach((v,j)=>{const dd=Math.abs(L.yOf(v)-y);if(dd<tol&&(!best||dd<best.d))best={type:"v",j,d:dd}});
+  return best}
+function moveCursor(ev){
+  const f=files[cur],g=geom(),r=cv.getBoundingClientRect(),x=(ev.clientX-r.left)*g.dpr,y=(ev.clientY-r.top)*g.dpr;
+  if(curDrag.type==="t"){const i=Math.min(view[1],Math.round(view[0]+Math.min(1,Math.max(0,(x-g.L)/g.pw))*vspan()));curT[curDrag.j]=i*dt(f)}
+  else{const L=laneY[curVch];if(L)curV[curDrag.j]=L.vOf(Math.min(L.top+L.h,Math.max(L.top,y)))}
+}
+
+/* ---------- interazione ---------- */
+function idxAt(ev){const f=files[cur],g=geom(),r=cv.getBoundingClientRect();const x=(ev.clientX-r.left)*g.dpr;const i=Math.floor(view[0]+(x-g.L)/g.pw*vspan());return {i:Math.min(Math.max(i,view[0]),view[1]),x}}
+function vspan(){return view[1]-view[0]+1}   // campioni nella vista: 12 divisioni = vspan × dt
+cv.addEventListener("pointermove",ev=>{const f=files[cur];if(!f)return;
+  if(curDrag)moveCursor(ev);else if(!drag){const h=cursorHit(ev);cv.style.cursor=h?(h.type==="t"?"ew-resize":"ns-resize"):"crosshair"}
+  const {i,x}=idxAt(ev);hover=i;if(drag)drag.x1=x;
+  const t=i*dt(f);const parts=['<span>t = '+fmtT(t,(view[1]-view[0])*dt(f)/10)+'</span>'];
+  [0,1].forEach(k=>{if(f.ch[k].show)parts.push('<span class="c'+(k+1)+'">'+escapeHtml(f.ch[k].name)+' = '+fmtV(volts(f,k,i))+(clipped(f,k,i)?" (fuori schermo)":"")+'</span>')});
+  if(drag){const a=idxAt({clientX:Math.min(drag.cx0,ev.clientX)}).i,b=idxAt({clientX:Math.max(drag.cx0,ev.clientX)}).i;parts.push("<span>Δt = "+fmtT((b-a)*dt(f))+"</span>")}
+  $("readout").innerHTML=parts.join("");draw()});
+cv.addEventListener("pointerleave",()=>{hover=null;draw()});
+cv.addEventListener("pointercancel",()=>{curDrag=null;drag=null;draw()});
+cv.addEventListener("pointerdown",ev=>{const h=cursorHit(ev);if(h){curDrag=h;cv.setPointerCapture(ev.pointerId);ev.preventDefault();return}
+  if(ev.pointerType==="touch")return;const {x}=idxAt(ev);drag={x0:x,x1:x,cx0:ev.clientX};cv.setPointerCapture(ev.pointerId)});
+cv.addEventListener("pointerup",ev=>{if(curDrag){curDrag=null;draw();return}if(!drag)return;const a=Math.min(drag.cx0,ev.clientX),b=Math.max(drag.cx0,ev.clientX);drag=null;
+  if(b-a>6){const i0=idxAt({clientX:a}).i,i1=idxAt({clientX:b}).i;if(i1-i0>=10){view=[i0,i1];syncInputs();updateStats()}}draw()});
+cv.addEventListener("dblclick",()=>{const f=files[cur];if(!f)return;view=[0,f.per-1];syncInputs();updateStats();draw()});
+$("reset").onclick=()=>cv.dispatchEvent(new Event("dblclick"));
+$("mode").onclick=e=>{overlay=!overlay;e.target.setAttribute("aria-pressed",overlay);e.target.textContent=overlay?"Tracce separate":"Sovrapponi le tracce";resize()};
+function setSdiv(x){const f=files[cur];if(!f||!(x>0))return;const d=dt(f);let n=Math.max(10,Math.round(HDIV*x/d));
+  const mid=Math.round((view[0]+view[1]+1)/2);let a=mid-Math.round(n/2);if(n>f.per){a=0;n=f.per}
+  a=Math.max(0,Math.min(a,f.per-n));view=[a,a+n-1];syncInputs();updateStats();draw()}
+$("tdiv").onchange=()=>setSdiv(readScaled($("tdiv")));
+$("tdn").onclick=()=>{const x=readScaled($("tdiv"));if(x>0)setSdiv(step125(x,-1))};
+$("tdiv").onkeydown=e=>{if(e.key==="ArrowUp"||e.key==="ArrowDown"){e.preventDefault();const x=readScaled($("tdiv"));if(x>0)setSdiv(step125(x,e.key==="ArrowUp"?1:-1))}};
+$("tup").onclick=()=>{const x=readScaled($("tdiv"));if(x>0)setSdiv(step125(x,1))};
+function setRange(){const f=files[cur];if(!f)return;const d=dt(f);let a=Math.round(readScaled($("t0"))/d),b=Math.round(readScaled($("t1"))/d)-1;
+  if(isFinite(a)&&isFinite(b)){a=Math.max(0,Math.min(a,f.per-1));b=Math.max(0,Math.min(b,f.per-1));if(b-a>=9)view=[a,b]}
+  syncInputs();updateStats();draw()}
+function panTo(a){const f=files[cur];if(!f)return;const n=vspan();a=Math.max(0,Math.min(Math.round(a),f.per-n));view=[a,a+n-1];syncInputs();updateStats();draw()}
+$("pan").oninput=e=>panTo(+e.target.value);
+$("panl").onclick=()=>panTo(view[0]-vspan()/HDIV);
+$("panr").onclick=()=>panTo(view[0]+vspan()/HDIV);
+// trackpad: scorrimento orizzontale a due dita, oppure Maiusc + rotellina
+cv.addEventListener("wheel",ev=>{const f=files[cur];if(!f||vspan()>=f.per)return;
+  const dx=Math.abs(ev.deltaX)>Math.abs(ev.deltaY)?ev.deltaX:(ev.shiftKey?ev.deltaY:0);if(!dx)return;
+  ev.preventDefault();panTo(view[0]+dx/cv.clientWidth*vspan())},{passive:false});
+$("t0").onchange=setRange;$("t1").onchange=setRange;
+$("acq").onchange=e=>{const f=files[cur];if(!f)return;const a=+e.target.value;f.acq=a;
+  f.raw=[f.all[0].subarray(a*f.per,(a+1)*f.per),f.all[1].subarray(a*f.per,(a+1)*f.per)];syncInputs();updateStats();refreshDecode()};
+
+/* ---------- file ---------- */
+function openMany(list){
+  // in ordine numerico (1, 2, … 10), saltando i file nascosti "._" creati da macOS
+  const fs=[...list].filter(f=>/\.wav$/i.test(f.name)&&!f.name.startsWith("._"));
+  fs.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+  if(!fs.length){setMsg("Nessun file .wav trovato.",true);return}
+  Promise.all(fs.map(f=>f.arrayBuffer().then(b=>[f.name,b]))).then(r=>r.forEach(([n,b])=>addFile(n,b)));
+}
+$("file").onchange=e=>{openMany(e.target.files);e.target.value=""};
+$("dir").onchange=e=>{openMany(e.target.files);e.target.value=""};
+const drop=$("drop");
+["dragenter","dragover"].forEach(t=>document.addEventListener(t,e=>{e.preventDefault();drop.classList.add("over")}));
+["dragleave","drop"].forEach(t=>document.addEventListener(t,e=>{e.preventDefault();if(t==="drop"||e.target===document.documentElement)drop.classList.remove("over")}));
+document.addEventListener("drop",e=>openMany(e.dataTransfer.files));
+
+/* ---------- esportazione ---------- */
+function csvText(){const f=files[cur],k=[0,1].filter(k=>f.ch[k].show),d=dt(f);
+  const lines=["tempo_s;"+k.map(j=>f.ch[j].name.replace(/;/g,",")+"_V").join(";")];
+  for(let i=view[0];i<=view[1];i++)lines.push((i*d).toPrecision(8)+";"+k.map(j=>{const v=volts(f,j,i);return isFinite(v)?v.toFixed(5):""}).join(";"));
+  return lines.join("\r\n")+"\r\n"}
+function baseName(){const f=files[cur];return f.name.replace(/\s*\(.*\)$/,"").replace(/\.wav$/i,"")+(f.acq?"_acq"+(f.acq+1):"")}
+function setMsg(t,err){$("msg").textContent=t;$("msg").className="msg"+(err?" err":"")}
+let dlNS=null;
+const LOCAL=!window.claude;   // aperto come file locale nel browser, fuori da claude.ai
+(async()=>{if(LOCAL)return;try{dlNS=await window.claude.use("downloads")}catch(e){dlNS=null}
+  if(!dlNS){$("csv").hidden=true;$("png").hidden=true}})();
+function saveLocal(filename,data){
+  const url=URL.createObjectURL(data instanceof Blob?data:new Blob([data],{type:"text/csv"}));
+  const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);setMsg("Salvato: "+filename);
+}
+async function save(filename,data){
+  if(LOCAL){saveLocal(filename,data);return}
+  if(!dlNS){setMsg("Il salvataggio non è disponibile in questa vista: usa Copia CSV.",true);return}
+  try{await dlNS.save({filename,data});setMsg("Salvato: "+filename)}
+  catch(e){setMsg(e&&e.code==="declined"?"Salvataggio annullato.":"Salvataggio non riuscito ("+(e&&e.code||"errore")+").",e&&e.code!=="declined")}
+}
+const noFile=()=>{if(files[cur])return false;setMsg("Apri prima un file .wav.",true);return true};
+$("csv").onclick=()=>{if(!noFile())save(baseName()+".csv",csvText())};
+$("png").onclick=()=>{if(!noFile())cv.toBlob(b=>b&&save(baseName()+".png",b),"image/png")};
+$("copycmd").onclick=async()=>{try{await navigator.clipboard.writeText($("cmd").textContent);setMsg("Comando copiato negli appunti.")}catch(e){setMsg("Gli appunti non sono disponibili qui: seleziona il comando e copialo.",true)}};
+$("copy").onclick=async()=>{if(noFile())return;const t=csvText();try{await navigator.clipboard.writeText(t);setMsg("CSV copiato negli appunti ("+t.split("\n").length+" righe).")}catch(e){setMsg("Gli appunti non sono disponibili qui: usa Salva CSV.",true)}};
+
+/* ---------- oscilloscopio collegato (solo con "fnirsi.py visore") ---------- */
+const SERVED=/^https?:$/.test(location.protocol)&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname);
+let busy=false, connected=null, gallery=[], galGen=0;
+function liveMsg(t,err){$("livemsg").textContent=t;$("livemsg").className="msg"+(err?" err":"")}
+async function api(path,body){
+  const r=await fetch(path,body!==undefined?{method:"POST",headers:{"X-Fnirsi":"1","Content-Type":"application/json"},body:JSON.stringify(body)}:{cache:"no-store"});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.errore||("errore "+r.status));
+  return j}
+function fmtSize(n){return n>=1e6?(n/1e6).toFixed(1)+" MB":Math.round(n/1e3)+" kB"}
+function setButtons(){
+  const on=!!connected&&!busy, sel=gallery.filter(g=>g.sel).length;
+  $("reload").disabled=!on;$("eject").disabled=!on;
+  $("dlscope").disabled=!on||!sel;$("delscope").disabled=!on||!sel;
+  $("dlscope").textContent=sel?"Scarica selezionati ("+sel+")":"Scarica selezionati";
+  $("delscope").textContent=sel?"Cancella dallo strumento ("+sel+")":"Cancella dallo strumento";
+  $("galtools").hidden=!gallery.length}
+function renderItem(g){
+  const el=g.el;el.setAttribute("aria-checked",g.sel);el.querySelector("input").checked=g.sel;
+  const b=el.querySelector(".badge");
+  if(g.copiato===undefined){b.textContent="…";b.className="badge";b.title=""}
+  else if(g.copiato){b.textContent="sul Mac";b.className="badge";b.title="Già copiato: misure/"+g.copiato}
+  else{b.textContent="nuovo";b.className="badge new";b.title="Non ancora copiato sul Mac"}}
+function buildGallery(list){
+  galGen++;const G=$("gallery");G.textContent="";
+  gallery=list.map(x=>{
+    const el=document.createElement("div");el.className="thumb "+x.tipo;el.setAttribute("role","checkbox");el.tabIndex=0;
+    el.innerHTML='<div class="img">'+(x.tipo==="bmp"?"screenshot":"forma d'onda")+'</div><div class="nm"><input type="checkbox" tabindex="-1" aria-hidden="true"><span></span></div><div class="meta"><span></span><span class="badge">…</span></div>';
+    el.querySelector(".nm span").textContent=x.nome;el.querySelector(".meta span").textContent=fmtSize(x.dimensione);
+    const g={...x,sel:false,el,copiato:undefined};
+    const tog=()=>{g.sel=!g.sel;renderItem(g);setButtons()};
+    el.onclick=tog;el.onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();tog()}};
+    G.appendChild(el);renderItem(g);return g});
+  setButtons();loadThumbs(galGen)}
+async function loadThumbs(gen){
+  for(const g of gallery){
+    if(gen!==galGen)return;
+    if(g.copiato!==undefined)continue;
+    try{
+      const r=await fetch("/api/miniatura?f="+encodeURIComponent(g.f),{cache:"no-store"});
+      if(gen!==galGen)return;
+      if(r.status===200||r.status===204){
+        g.copiato=decodeURIComponent(r.headers.get("X-Copiato")||"")||null;
+        if(r.status===200){const url=URL.createObjectURL(await r.blob());const im=document.createElement("img");im.alt="Miniatura di "+g.nome;im.src=url;
+          const box=g.el.querySelector(".img");box.textContent="";box.appendChild(im)}
+        renderItem(g)}
+      else{const j=await r.json().catch(()=>({}));g.el.querySelector(".img").textContent="miniatura non letta";
+        if(r.status===504){liveMsg(j.errore||"Lettura bloccata.",true);return}}
+    }catch(e){return}
+  }}
+async function loadGallery(){
+  try{const r=await api("/api/elenco");buildGallery(r.collegato?r.file:[])}
+  catch(e){liveMsg("Elenco non letto: "+e.message,true)}}
+async function pollScope(){
+  if(busy)return;
+  try{
+    const s=await api("/api/stato");
+    $("scopestate").textContent=s.collegato?"Oscilloscopio collegato · "+(s.file_sullo_strumento??"?")+" file":"Oscilloscopio non collegato: attiva USB sharing e collega il cavo.";
+    if(s.collegato!==connected){connected=s.collegato;if(connected)loadGallery();else{galGen++;gallery=[];$("gallery").textContent=""}}
+  }catch(e){connected=null;$("scopestate").textContent="Il visore locale non risponde: è ancora aperto il terminale con fnirsi.py visore?"}
+  setButtons()}
+function addShot(name){
+  const a=document.createElement("a");a.className="chip";a.href="/api/file/"+encodeURIComponent(name);a.target="_blank";a.rel="noopener";a.textContent=name;
+  a.title="Apri lo screenshot";$("shots").appendChild(a)}
+async function withBusy(label,fn){
+  busy=true;setButtons();$("scopestate").textContent=label;liveMsg("");
+  try{await fn()}catch(e){liveMsg(e.message,true)}
+  busy=false;await pollScope()}
+$("dlscope").onclick=()=>withBusy("Copia in corso: non staccare il cavo…",async()=>{
+  const sel=gallery.filter(g=>g.sel);
+  const r=await api("/api/scarica",{file:sel.map(g=>g.f)});
+  const byNum=(a,b)=>a.nome.localeCompare(b.nome,undefined,{numeric:true});
+  const wavs=r.file.filter(x=>x.tipo==="wav").sort(byNum), bmps=r.file.filter(x=>x.tipo==="bmp").sort(byNum);
+  let last=-1;
+  for(const x of wavs){
+    const b=await fetch("/api/file/"+encodeURIComponent(x.nome)).then(q=>{if(!q.ok)throw new Error(x.nome+" non leggibile");return q.arrayBuffer()});
+    const old=files.findIndex(f=>f.name===x.nome);
+    if(old>=0)files.splice(old,1);
+    try{const f=parse(x.nome,b);f.tag=x.nuovo?"nuovo":"";files.push(f);last=files.length-1}catch(e){liveMsg(e.message,true)}}
+  if(last>=0)select(last);
+  bmps.forEach(x=>{if(![...$("shots").children].some(a=>a.textContent===x.nome))addShot(x.nome)});
+  if(r.ok)sel.forEach(g=>{g.copiato=g.copiato||(r.cartella.split("/").pop()+"/"+g.nome);g.sel=false;renderItem(g)});
+  const nNew=r.file.filter(x=>x.nuovo).length;
+  const old=r.file.length-nNew, pl=(n,a,b)=>n+" "+(n===1?a:b);
+  liveMsg(r.ok?(nNew?pl(nNew,"file copiato","file copiati"):"Nessun file nuovo da copiare")+(old?"; "+pl(old,"era già sul Mac","erano già sul Mac"):"")
+    +(wavs.length?". "+pl(wavs.length,"forma d'onda aperta","forme d'onda aperte")+" nel visore":"")+(bmps.length?", "+pl(bmps.length,"screenshot elencato","screenshot elencati")+" sotto":"")+".":r.messaggio,!r.ok)});
+$("delscope").onclick=()=>{
+  const sel=gallery.filter(g=>g.sel), notCopied=sel.filter(g=>!g.copiato);
+  let q="Cancellare "+sel.length+" file dall'oscilloscopio?\n\n"+sel.map(g=>g.nome).join(", ")+"\n\nNon si può annullare.";
+  if(notCopied.length)q+="\n\nATTENZIONE: "+notCopied.length+" di questi non risultano copiati sul Mac: "+notCopied.map(g=>g.nome).join(", ");
+  if(!confirm(q))return;
+  withBusy("Cancellazione in corso…",async()=>{
+    const r=await api("/api/cancella",{file:sel.map(g=>g.f)});
+    const gone=new Set(r.cancellati);
+    gallery=gallery.filter(g=>{if(gone.has(g.f)){g.el.remove();return false}return true});
+    liveMsg(r.messaggio,!r.ok)})};
+$("selnew").onclick=()=>{gallery.forEach(g=>{g.sel=g.copiato===null;renderItem(g)});setButtons()};
+$("selall").onclick=()=>{gallery.forEach(g=>{g.sel=true;renderItem(g)});setButtons()};
+$("selnone").onclick=()=>{gallery.forEach(g=>{g.sel=false;renderItem(g)});setButtons()};
+$("reload").onclick=()=>{loadGallery()};
+$("eject").onclick=()=>withBusy("Espulsione…",async()=>{const r=await api("/api/espelli",{});liveMsg(r.messaggio,!r.ok)});
+if(SERVED){
+  $("live").hidden=false;$("livehint").hidden=true;$("offhelp").hidden=true;$("cmdrow").hidden=true;
+  const card=$("scopecard");document.querySelector(".wrap").insertBefore(card,$("list"));
+  pollScope();setInterval(pollScope,3000);
+}
+
+/* ---------- avvio ---------- */
+window.addEventListener("resize",resize);
+if(window.ResizeObserver){const ro=new ResizeObserver(()=>resize());ro.observe(cv);ro.observe(document.querySelector(".side"))}
+resize();
+</script>
+
+</body></html>
